@@ -4,7 +4,7 @@ import React from 'react'
 import Alert from 'react-popup-alert'
 import '../manageBranchs/index.css'
 import { FiArrowDown, FiArrowUp, FiEdit, FiTrash } from "react-icons/fi";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Popup from "reactjs-popup";
 
 interface iuser {
@@ -35,14 +35,12 @@ interface iself {
 const BranchBody: React.FC = () => {
     const [Msg, setMsg] = useState<ibranch[]>([]);
     const [Limit, setLimit] = useState<ibranch[]>([]);
-    const [direction, setDirection] = useState('desc');
-    const [ordenation, setOrdenation] = useState('codigo');
+    const [direction] = useState('desc');
+    const [ordenation] = useState('codigo');
     const [page, setPage] = useState(0);
     const [codigo, setCodigo] = useState('');
     const [nome, setNome] = useState('');
     const [data, setData] = useState('');
-    const [userCodigo, setUserCodigo] = useState('');
-    const [userNome, setUserNome] = useState('');
     const [isOpen, setIsOpen] = useState(false);
     const [descricao2, setDescricao2] = useState("");
     const [alertState, setAlertState] = React.useState({ show: false, text: '' });
@@ -51,7 +49,7 @@ const BranchBody: React.FC = () => {
 
     useEffect(() => {
         const loadMsg = async () => {
-            const response = await api.get('/v1/ts/branchs', { params: { page: page, limit: 4, direction: direction, ordenation: ordenation } });
+            const response = await api.get('/v1/ts/branchs', { params: { page, limit: 4, direction, ordenation } });
             const limit = await api.get('/v1/ts/branchs');
             if (Object.keys(response.data).length) {
                 setMsg(response.data._embedded.branchDTOList);
@@ -68,7 +66,7 @@ const BranchBody: React.FC = () => {
         window.location.reload();
     }
 
-    const updateMsg = () => history.push('/updateBranch');
+    const updateMsg = (id: number) => history.push('/updatebranch', { id });
     const criarNovo = () => history.push('/newbranch');
 
     const ExibirMsg = async (codigo: string) => {
@@ -77,8 +75,6 @@ const BranchBody: React.FC = () => {
         setNome(response.data.nome_branch)
         setDescricao2(response.data.descricao_branch)
         setData(response.data.data_branch)
-        setUserCodigo(response.data.userDTO.codigo_user)
-        setUserNome(response.data.userDTO.nome_user)
     }
 
     return (
@@ -93,60 +89,44 @@ const BranchBody: React.FC = () => {
                 pressCloseOnOutsideClick={true}
                 showBorderBottom={true}
                 alertStyles={{
-                    "background-color": "#f8f9fa",
-                    "width": "300px",
-                    "height": "100px",
-                    "display": "flex",
-                    "flex-direction": "column",
-                    "align-items": "center",
-                    "justify-content": "center",
-                    "left": "42%",
-                    "bottom": "30%",
-                    "border-radius": "8px",
-                    "border": "2px solid #C4C4C4",
-                    "position": "absolute"
+                    "background-color": "#f8f9fa", "width": "300px", "height": "100px",
+                    "display": "flex", "flex-direction": "column", "align-items": "center",
+                    "justify-content": "center", "left": "42%", "bottom": "30%",
+                    "border-radius": "8px", "border": "2px solid #C4C4C4", "position": "absolute"
                 }}
                 headerStyles={{}}
                 textStyles={{}}
                 buttonStyles={{
-                    "background-color": "#efefef",
-                    "border-radius": "8px",
-                    "margin-bottom": "10px",
-                    "text-decoration": "none",
-                    "button-decoration": "none",
-                    "align-text": "center",
-                    "width": "70px",
-                    "border": "2px solid #C4C4C4",
-                    "height": "30px",
-                    "color": "#000",
-                    "padding-left": "10px"
+                    "background-color": "#efefef", "border-radius": "8px", "margin-bottom": "10px",
+                    "width": "70px", "border": "2px solid #C4C4C4", "height": "30px",
+                    "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='BranchBody'>
-                <div id='sidebar' >
+            <div id='BranchBody'>
+                <div id='sidebar'>
                     {isAdmin && <button id='newObj' onClick={criarNovo}>Criar novo</button>}
-                    <FiArrowUp id='carouselIcon' onClick={() => { if (page - 1 >= 0) setPage(page - 1) }} />
+                    <FiArrowUp className='carousel-icon' onClick={() => { if (page - 1 >= 0) setPage(page - 1) }} />
                     {Msg.map(m => (
-                        <button id='buttons' key={m.codigo_branch}>
-                            <button id='text' onClick={() => { ExibirMsg(m.codigo_branch.toString()) }}>
+                        <div className='item-btn' key={m.codigo_branch}>
+                            <div className='item-text' onClick={() => ExibirMsg(m.codigo_branch.toString())}>
                                 <h6>{m.nome_branch}</h6>
                                 <h4>{m.descricao_branch}</h4>
-                            </button>
-                            <div id='iconsButtons'>
-                                {isAdmin && <FiEdit id='editButton' onClick={updateMsg} />}
+                            </div>
+                            <div className='icons-buttons'>
+                                {isAdmin && <FiEdit className='edit-btn' onClick={() => updateMsg(m.codigo_branch)} />}
                                 {isAdmin && (
-                                    <Popup trigger={<FiTrash id='deleteButton' />} position="center center" open={isOpen}>
+                                    <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button id='confDelete' onClick={() => deleteMsg(m.codigo_branch.toString())}>Sim</button>
-                                        <button id='confDelete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
+                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_branch.toString())}>Sim</button>
+                                        <button className='conf-delete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
                                     </Popup>
                                 )}
                             </div>
-                        </button>
+                        </div>
                     ))}
-                    <FiArrowDown id='carouselIcon' onClick={() => { if (Msg.length == 4 && page + 1 < Limit.length / 4) { setPage(page + 1) } }}/>
+                    <FiArrowDown className='carousel-icon' onClick={() => { if (Msg.length === 4 && page + 1 < Limit.length / 4) { setPage(page + 1) } }} />
                 </div>
-                <div >
+                <div>
                     <h2 id='TitleBar'>Lista de branchs:</h2>
                     <ul id='BranchUl'>
                         <div id='BranchForm'>
@@ -156,14 +136,12 @@ const BranchBody: React.FC = () => {
                                     <h1>Nome: {nome}</h1>
                                     <h1>Descrição: {descricao2}</h1>
                                     <h1>Data de criação: {data}</h1>
-                                    <h1>Id do User: {userCodigo}</h1>
-                                    <h1>Nome do user: {userNome}</h1>
                                 </li>
                             </div>
                         </div>
                     </ul>
                 </div>
-            </body>
+            </div>
         </>
     );
 }

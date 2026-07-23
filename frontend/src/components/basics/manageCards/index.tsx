@@ -102,7 +102,6 @@ const CardBody: React.FC = () => {
         loadMsg();
     }, [page, busca, categoria]);
 
-    // reseta página ao mudar filtro
     useEffect(() => { setPage(0); }, [busca, categoria]);
 
     const showAlert = (msg: string) => {
@@ -116,9 +115,9 @@ const CardBody: React.FC = () => {
         window.location.reload();
     };
 
-    const updateMsg = () => {
+    const updateMsg = (id: number) => {
         if (!isAdmin) { showAlert('Você não tem permissão'); return; }
-        history.push('/updateCard');
+        history.push('/updatecard', { id });
     };
 
     const criarNovo = () => {
@@ -137,12 +136,18 @@ const CardBody: React.FC = () => {
         setResumo(d.resumo_card ?? '');
         setTags(d.tags_card ?? '');
         setCategoriaCard(d.categoria_card ?? '');
-        setFolderId(d.folderDTO.codigo_folder);
-        setFolderNome(d.folderDTO.nome_folder);
-        setBranchId(d.folderDTO.branchDTO.codigo_branch);
-        setBranchNome(d.folderDTO.branchDTO.nome_branch);
-        setUserId(d.folderDTO.branchDTO.userDTO.codigo_user);
-        setUserNome(d.folderDTO.branchDTO.userDTO.nome_user);
+        setFolderId(d.idFolder ?? '');
+        setBranchId(d.idBranch ?? '');
+        setUserId(d.idUser ?? '');
+        setFolderNome('');
+        setBranchNome('');
+        setUserNome('');
+        if (d.idFolder) api.get('/v1/ts/folders/' + d.idFolder)
+            .then(r => setFolderNome(r.data.nome_folder ?? '')).catch(() => {});
+        if (d.idBranch) api.get('/v1/ts/branchs/' + d.idBranch)
+            .then(r => setBranchNome(r.data.nome_branch ?? '')).catch(() => {});
+        if (d.idUser) api.get('/v1/ts/users/' + d.idUser)
+            .then(r => setUserNome(r.data.nome_user ?? '')).catch(() => {});
     };
 
     return (
@@ -169,7 +174,7 @@ const CardBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='CardBody'>
+            <div id='CardBody'>
                 <div id='sidebar'>
                     {isAdmin && <button id='newObj' onClick={criarNovo}>Criar novo</button>}
 
@@ -192,26 +197,26 @@ const CardBody: React.FC = () => {
                         </select>
                     </div>
 
-                    <FiArrowUp id='carouselIcon' onClick={() => { if (page > 0) setPage(page - 1); }} />
+                    <FiArrowUp className='carousel-icon' onClick={() => { if (page > 0) setPage(page - 1); }} />
                     {Msg.map(m => (
-                        <button id='buttons' key={m.codigo_card}>
-                            <button id='text' onClick={() => ExibirMsg(m.codigo_card.toString())}>
+                        <div className='item-btn' key={m.codigo_card}>
+                            <div className='item-text' onClick={() => ExibirMsg(m.codigo_card.toString())}>
                                 <h6>{m.nome_card}</h6>
                                 {m.resumo_card && <h4>{m.resumo_card}</h4>}
-                            </button>
-                            <div id='iconsButtons'>
-                                {isAdmin && <FiEdit id='editButton' onClick={updateMsg} />}
+                            </div>
+                            <div className='icons-buttons'>
+                                {isAdmin && <FiEdit className='edit-btn' onClick={() => updateMsg(m.codigo_card)} />}
                                 {isAdmin && (
-                                    <Popup trigger={<FiTrash id='deleteButton' />} position="center center" open={isOpen}>
+                                    <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button id='confDelete' onClick={() => deleteMsg(m.codigo_card.toString())}>Sim</button>
-                                        <button id='confDelete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
+                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_card.toString())}>Sim</button>
+                                        <button className='conf-delete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
                                     </Popup>
                                 )}
                             </div>
-                        </button>
+                        </div>
                     ))}
-                    <FiArrowDown id='carouselIcon' onClick={() => {
+                    <FiArrowDown className='carousel-icon' onClick={() => {
                         if (Msg.length === PAGE_SIZE && (page + 1) * PAGE_SIZE < totalCards) setPage(page + 1);
                     }} />
                 </div>
@@ -226,12 +231,18 @@ const CardBody: React.FC = () => {
                                     {resumo && <h1>Resumo: {resumo}</h1>}
                                     {categoriaCard && <h1>Categoria: {categoriaCard}</h1>}
                                     {tags && <h1>Tags: {tags}</h1>}
-                                    <img
-                                        src={thumbnailLink || '/default-thumbnail.png'}
-                                        alt='thumbnail'
-                                        id='card-thumbnail'
-                                        onError={e => { (e.target as HTMLImageElement).src = '/default-thumbnail.png'; }}
-                                    />
+                                    {thumbnailLink && (
+                                        <img
+                                            src={thumbnailLink}
+                                            alt='thumbnail'
+                                            id='card-thumbnail'
+                                            onError={e => {
+                                                const img = e.target as HTMLImageElement;
+                                                img.onerror = null;
+                                                img.style.display = 'none';
+                                            }}
+                                        />
+                                    )}
                                     {descricao2 && (
                                         <div id='descricao-html' dangerouslySetInnerHTML={{ __html: descricao2 }} />
                                     )}
@@ -247,7 +258,7 @@ const CardBody: React.FC = () => {
                         </div>
                     </ul>
                 </div>
-            </body>
+            </div>
         </>
     );
 }

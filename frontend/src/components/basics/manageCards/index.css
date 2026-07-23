@@ -1,144 +1,32 @@
-#CardBody #sidebar{
-    width: 20vw;
-    height: 9vh;
-    align-items: center;
-    border-radius: 8px ;
-    cursor: pointer;
-} 
-#CardBody #sidebar #carouselIcon{
-    margin-left: 230px;
-    width: 40px;
-    height: 40px;
-    margin-top: 15px;
-} 
-#CardBody #sidebar #buttons {
-    display: flex;
-    flex-direction: row;
-    border-radius: 8px;
-    margin-top: 20px;
-} 
-#CardBody #sidebar #buttons #iconsButtons #editButton,#deleteButton{
-    width: 40px;
-    height: 40px;
-    padding-left: 10px;
-} 
-#CardBody #sidebar #buttons #iconsButtons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-} 
-#CardBody #sidebar #buttons #text {
-    padding: 10px;
-    border: none;
-} 
-#CardBody #sidebar #buttons #text h6{
-    width: 15vw;
-    height: 20px;
-    background-color:  #C4C4C4;
-    border-radius: 8px ;
-    padding-left: 15px;
-    margin-top: 10px;
-} 
-#CardBody #sidebar #buttons #text h5{
-    width: 15vw;
-    height: 80px;
-    background-color: #AE4646;
-    border-radius: 8px ;
-    margin: 10px;
-} 
-#CardBody #sidebar #titleImage{
-    display: flex;
-    flex-direction: row;
-} 
-#sidebar #newObj{
-    height: 80px;
-    width: 20vw;
-    background-color:  #C4C4C4;
-    font-size: 25px;
-    text-align: center;
-    border-radius: 16px;
-} 
- #CardBody{
+#CardBody {
     width: 60vw;
-    height: 70vh;
-    padding: 5vh 0 5vh 0;
-    margin: 0 20vw 0 20vw ;
+    min-height: 70vh;
+    height: auto;
+    padding: 5vh 0;
+    margin: 0 20vw;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-}
-#CardBody #TitleBar{
-   border-radius: 8px 8px 0px 0px;
-   width: 35vw;
-    height: 2vw;
-    background-color:  #C4C4C4;
-    font-size: 22px;
-    padding:10px 0px 0px 20px;
-    margin: 0 0 0 20px;
-}
-#CardBody #CardUl{
-    width: 35vw;
-    height: 52vh;
-    margin: 0 0 0 20px;
-    padding: 0;
-    border-radius: 0px 0px 8px 8px;
-    border: 3px solid #C4C4C4;
-    box-shadow: 3px rgba(0, 0, 0, 0.527);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#CardBody #CardUl #CardForm{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    justify-content: center;
-    width: 25vw;
-    height: 43vh;
-    border-radius: 0px 0px 4px 4px;
- }
- #CardBody #CardUl #CardForm #divH1 {
-    display: flex;
-    flex-direction: column;
-    height: 45vh;
-    justify-content: center;
-    align-items: center;
-    width: 14vw;
-    margin: 1.3vh 0vw;
-    
-}
-#CardBody #CardUl #CardForm #divH1 h1{
-    padding: 0px 0px 30px 0px;
-    height: 30px;
-    width: 12.5vw;
-    font-size: 22px;
-}
-#CardBody  #CardUl button{
-    margin: 0 0 60px 0;
-    border-radius: 8px;
-    width: 8vw;
-    height: 4vh;
-}
-#popup-root div {
-    position: absolute;
-    top: 50%;
-    left: 44%;
-    width: 300px;
-    height: 180px;
-}
-#popup-root #popupText{
-    padding: 10%;
-    font-size: 20px;
-}
-#popup-root div button{
-    margin-left: 20%;
-    border-radius: 8px;
-    width: 60px;
-    height: 30px;
+    align-items: flex-start;
 }
 
-/* Barra de pesquisa */
+#CardBody #sidebar {
+    width: 20vw;
+    height: auto;
+    align-items: center;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+#sidebar #newObj {
+    height: 80px;
+    width: 20vw;
+    background-color: #C4C4C4;
+    font-size: 25px;
+    text-align: center;
+    border-radius: 16px;
+}
+
 #sidebar #searchBar {
     display: flex;
     flex-direction: column;
@@ -146,9 +34,11 @@
     margin: 10px 0;
     width: 20vw;
 }
+
 #sidebar #searchBar #searchIcon {
     display: none;
 }
+
 #sidebar #searchBar #searchInput {
     width: 100%;
     height: 36px;
@@ -158,6 +48,7 @@
     font-size: 14px;
     box-sizing: border-box;
 }
+
 #sidebar #searchBar #categoriaSelect {
     width: 100%;
     height: 36px;
@@ -167,4 +58,150 @@
     font-size: 14px;
     background-color: #fff;
     box-sizing: border-box;
+}
+
+#CardBody #sidebar .carousel-icon {
+    margin-left: 230px;
+    width: 40px;
+    height: 40px;
+    margin-top: 15px;
+}
+
+#CardBody #sidebar .item-btn {
+    display: flex;
+    flex-direction: row;
+    border-radius: 8px;
+    margin-top: 20px;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+}
+
+#CardBody #sidebar .item-btn .item-text {
+    padding: 10px;
+    cursor: pointer;
+    flex: 1;
+    text-align: left;
+}
+
+#CardBody #sidebar .item-btn .item-text h6 {
+    width: 15vw;
+    height: 20px;
+    background-color: #C4C4C4;
+    border-radius: 8px;
+    padding-left: 15px;
+    margin-top: 10px;
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#CardBody #sidebar .item-btn .icons-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#CardBody #sidebar .item-btn .icons-buttons .edit-btn,
+#CardBody #sidebar .item-btn .icons-buttons .delete-btn {
+    width: 40px;
+    height: 40px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+#CardBody #sidebar .item-btn .item-text h4 {
+    width: 15vw;
+    height: 80px;
+    background-color: #AE4646;
+    border-radius: 8px;
+    margin: 10px;
+}
+
+#CardBody #TitleBar {
+    border-radius: 8px 8px 0 0;
+    width: 35vw;
+    height: auto;
+    min-height: 2vw;
+    background-color: #C4C4C4;
+    font-size: 22px;
+    padding: 10px 0 10px 20px;
+    margin: 0 0 0 20px;
+}
+
+#CardBody #CardUl {
+    width: 35vw;
+    min-height: 100px;
+    max-height: 75vh;
+    overflow-y: auto;
+    margin: 0 0 0 20px;
+    padding: 0;
+    border-radius: 0 0 8px 8px;
+    border: 3px solid #C4C4C4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#CardBody #CardUl #CardForm {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+#CardBody #CardUl #CardForm #divH1 {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#CardBody #CardUl #CardForm #divH1 h1 {
+    height: auto;
+    padding: 6px 0;
+    width: 100%;
+    font-size: 16px;
+    word-break: break-word;
+}
+
+#CardBody #CardUl #CardForm #divH1 #card-thumbnail {
+    max-width: 100%;
+    height: auto;
+    margin: 8px 0;
+    border-radius: 8px;
+}
+
+#CardBody #CardUl #CardForm #divH1 #descricao-html {
+    width: 100%;
+    padding: 8px 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+#popup-root div {
+    position: absolute;
+    top: 50%;
+    left: 44%;
+    width: 300px;
+    height: 180px;
+}
+
+#popup-root #popupText {
+    padding: 10%;
+    font-size: 20px;
+}
+
+#popup-root div .conf-delete {
+    margin-left: 20%;
+    border-radius: 8px;
+    width: 60px;
+    height: 30px;
 }

@@ -1,127 +1,144 @@
-#UserBody #sidebar{
+#UserBody {
+    width: 60vw;
+    min-height: 70vh;
+    height: auto;
+    padding: 5vh 0;
+    margin: 0 20vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+#UserBody #sidebar {
     width: 20vw;
-    height: 9vh;
+    height: auto;
     align-items: center;
-    border-radius: 8px ;
+    border-radius: 8px;
     cursor: pointer;
-} 
-#UserBody #sidebar #carouselIcon{
+}
+
+#sidebar #newObj {
+    height: 80px;
+    width: 20vw;
+    background-color: #C4C4C4;
+    font-size: 25px;
+    text-align: center;
+    border-radius: 16px;
+}
+
+#UserBody #sidebar .carousel-icon {
     margin-left: 230px;
     width: 40px;
     height: 40px;
     margin-top: 15px;
-} 
-#UserBody #sidebar #buttons {
+}
+
+#UserBody #sidebar .item-btn {
     display: flex;
     flex-direction: row;
     border-radius: 8px;
     margin-top: 20px;
-} 
-#UserBody #sidebar #buttons #iconsButtons #editButton,#deleteButton{
-    width: 40px;
-    height: 40px;
-    padding-left: 10px;
-} 
-#UserBody #sidebar #buttons #iconsButtons {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-} 
-#UserBody #sidebar #buttons #text {
-    padding: 10px;
+    width: 100%;
+    background: none;
     border: none;
-    
-} 
-#UserBody #sidebar #buttons #text h6{
+    padding: 0;
+}
+
+#UserBody #sidebar .item-btn .item-text {
+    padding: 10px;
+    cursor: pointer;
+    flex: 1;
+    text-align: left;
+}
+
+#UserBody #sidebar .item-btn .item-text h6 {
     width: 15vw;
     height: 20px;
-    background-color:  #C4C4C4;
-    border-radius: 8px ;
+    background-color: #C4C4C4;
+    border-radius: 8px;
     padding-left: 15px;
     margin-top: 10px;
-} 
-#UserBody #sidebar #buttons #text h5{
+    line-height: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#UserBody #sidebar .item-btn .item-text h4 {
     width: 15vw;
     height: 80px;
     background-color: #AE4646;
-    border-radius: 8px ;
-    margin: 10px;
-} 
-#UserBody #sidebar #titleImage{
-    display: flex;
-    flex-direction: row;
-} 
-#sidebar #newObj{
-    height: 80px;
-    width: 20vw;
-    background-color:  #C4C4C4;
-    font-size: 25px;
-    text-align: center;
-
-    border-radius: 16px;
-} 
- #UserBody{
-    width: 60vw;
-    height: 70vh;
-    padding: 5vh 0 5vh 0;
-    margin: 0 20vw 0 20vw ;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-#UserBody #TitleBar{
-   border-radius: 8px 8px 0px 0px;
-   width: 35vw;
-    height: 2vw;
-    background-color:  #C4C4C4;
-    font-size: 22px;
-    padding:10px 0px 0px 20px;
-    margin: 0 0 0 20px;
-}
-#UserBody #UserUl{
-    width: 35vw;
-    height: 52vh;
-    margin: 0 0 0 20px;
-    padding: 0;
-    border-radius: 0px 0px 8px 8px;
-    border: 3px solid #C4C4C4;
-    box-shadow: 3px rgba(0, 0, 0, 0.527);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-#UserBody #UserUl #UserForm{
-    display: flex;
-    flex-direction: row;
-    padding: 0;
-    margin: 0;
-    justify-content: center;
-    width: 25vw;
-    height: 43vh;
-    border-radius: 0px 0px 4px 4px;
- }
- #UserBody #UserUl #UserForm #divH1 {
-    display: flex;
-    flex-direction: column;
-    height: 45vh;
-    justify-content: center;
-    align-items: center;
-    width: 14vw;
-    margin: 1.3vh 0vw;
-    
-}
-#UserBody #UserUl #UserForm #divH1 h1{
-    padding: 0px 0px 60px 0px;
-    height: 30px;
-    width: 12.5vw;
-    font-size: 22px;
-}
-#UserBody  #UserUl button{
-    margin: 0 0 60px 0;
     border-radius: 8px;
-    width: 8vw;
-    height: 4vh;
+    margin: 10px;
 }
+
+#UserBody #sidebar .item-btn .icons-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#UserBody #sidebar .item-btn .icons-buttons .edit-btn,
+#UserBody #sidebar .item-btn .icons-buttons .delete-btn {
+    width: 40px;
+    height: 40px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+
+#UserBody #TitleBar {
+    border-radius: 8px 8px 0 0;
+    width: 35vw;
+    height: auto;
+    min-height: 2vw;
+    background-color: #C4C4C4;
+    font-size: 22px;
+    padding: 10px 0 10px 20px;
+    margin: 0 0 0 20px;
+}
+
+#UserBody #UserUl {
+    width: 35vw;
+    min-height: 100px;
+    max-height: 75vh;
+    overflow-y: auto;
+    margin: 0 0 0 20px;
+    padding: 0;
+    border-radius: 0 0 8px 8px;
+    border: 3px solid #C4C4C4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#UserBody #UserUl #UserForm {
+    display: flex;
+    flex-direction: column;
+    padding: 12px;
+    margin: 0;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;
+}
+
+#UserBody #UserUl #UserForm #divH1 {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    justify-content: flex-start;
+    align-items: flex-start;
+    width: 100%;
+}
+
+#UserBody #UserUl #UserForm #divH1 h1 {
+    height: auto;
+    padding: 6px 0;
+    width: 100%;
+    font-size: 16px;
+    word-break: break-word;
+}
+
 #popup-root div {
     position: absolute;
     top: 50%;
@@ -129,11 +146,13 @@
     width: 300px;
     height: 180px;
 }
-#popup-root #popupText{
+
+#popup-root #popupText {
     padding: 10%;
     font-size: 20px;
 }
-#popup-root div button{
+
+#popup-root div .conf-delete {
     margin-left: 20%;
     border-radius: 8px;
     width: 60px;

@@ -49,6 +49,7 @@ const FolderBody: React.FC = () => {
     const [branchId, setBranchId] = useState('');
     const [branchNome, setBranchNome] = useState('');
     const [descricao2, setDescricao2] = useState('');
+
     const [isOpen, setIsOpen] = useState(false);
     const [alertState, setAlertState] = React.useState({ show: false, text: '' });
     const isAdmin = localStorage.getItem('admin') === 'true';
@@ -75,10 +76,22 @@ const FolderBody: React.FC = () => {
         setNome(response.data.nome_folder);
         setDescricao2(response.data.descricao_folder);
         setData(response.data.data_folder);
-        setBranchId(response.data.branchDTO.codigo_branch);
-        setBranchNome(response.data.branchDTO.nome_branch);
-        setUserId(response.data.branchDTO.userDTO.codigo_user);
-        setUserNome(response.data.branchDTO.userDTO.nome_user);
+        const bid = response.data.idBranch;
+        const uid = response.data.idUser;
+        setBranchId(bid ?? '');
+        setUserId(uid ?? '');
+        setBranchNome('');
+        setUserNome('');
+        if (bid) {
+            api.get('/v1/ts/branchs/' + bid)
+                .then(r => setBranchNome(r.data.nome_branch ?? ''))
+                .catch(() => {});
+        }
+        if (uid) {
+            api.get('/v1/ts/users/' + uid)
+                .then(r => setUserNome(r.data.nome_user ?? ''))
+                .catch(() => {});
+        }
     };
 
     return (
@@ -100,29 +113,29 @@ const FolderBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='FolderBody'>
+            <div id='FolderBody'>
                 <div id='sidebar'>
                     {isAdmin && <button id='newObj' onClick={() => history.push('/newfolder')}>Criar novo</button>}
-                    <FiArrowUp id='carouselIcon' onClick={() => { if (page > 0) setPage(page - 1); }} />
+                    <FiArrowUp className='carousel-icon' onClick={() => { if (page > 0) setPage(page - 1); }} />
                     {Msg.map(m => (
-                        <button id='buttons' key={m.codigo_folder}>
-                            <button id='text' onClick={() => ExibirMsg(m.codigo_folder.toString())}>
+                        <div className='item-btn' key={m.codigo_folder}>
+                            <div className='item-text' onClick={() => ExibirMsg(m.codigo_folder.toString())}>
                                 <h6>{m.nome_folder}</h6>
                                 <h4>{m.descricao_folder}</h4>
-                            </button>
-                            <div id='iconsButtons'>
-                                {isAdmin && <FiEdit id='editButton' onClick={() => history.push('/updateFolder')} />}
+                            </div>
+                            <div className='icons-buttons'>
+                                {isAdmin && <FiEdit className='edit-btn' onClick={() => history.push('/updatefolder', { id: m.codigo_folder })} />}
                                 {isAdmin && (
-                                    <Popup trigger={<FiTrash id='deleteButton' />} position="center center" open={isOpen}>
+                                    <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button id='confDelete' onClick={() => deleteMsg(m.codigo_folder.toString())}>Sim</button>
-                                        <button id='confDelete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
+                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_folder.toString())}>Sim</button>
+                                        <button className='conf-delete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
                                     </Popup>
                                 )}
                             </div>
-                        </button>
+                        </div>
                     ))}
-                    <FiArrowDown id='carouselIcon' onClick={() => { if (Msg.length == 4 && page + 1 < Limit.length / 4) setPage(page + 1); }} />
+                    <FiArrowDown className='carousel-icon' onClick={() => { if (Msg.length === 4 && page + 1 < Limit.length / 4) setPage(page + 1); }} />
                 </div>
                 <div>
                     <h2 id='TitleBar'>Lista de folders:</h2>
@@ -143,7 +156,7 @@ const FolderBody: React.FC = () => {
                         </div>
                     </ul>
                 </div>
-            </body>
+            </div>
         </>
     );
 }

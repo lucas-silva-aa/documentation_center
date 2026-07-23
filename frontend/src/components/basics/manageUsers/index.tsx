@@ -81,29 +81,29 @@ const UserBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='UserBody'>
+            <div id='UserBody'>
                 <div id='sidebar'>
                     {isAdmin && <button id='newObj' onClick={() => history.push('/newuser')}>Criar novo</button>}
-                    <FiArrowUp id='carouselIcon' onClick={() => { if (page > 0) setPage(page - 1); }} />
+                    <FiArrowUp className='carousel-icon' onClick={() => { if (page > 0) setPage(page - 1); }} />
                     {Msg.map(m => (
-                        <button id='buttons' key={m.codigo_user}>
-                            <button id='text' onClick={() => ExibirMsg(m.codigo_user.toString())}>
+                        <div className='item-btn' key={m.codigo_user}>
+                            <div className='item-text' onClick={() => ExibirMsg(m.codigo_user.toString())}>
                                 <h6>{m.nome_user}</h6>
                                 <h4>{m.descricao_user}</h4>
-                            </button>
-                            <div id='iconsButtons'>
-                                {isAdmin && <FiEdit id='editButton' onClick={() => history.push('/updateUser')} />}
+                            </div>
+                            <div className='icons-buttons'>
+                                {isAdmin && <FiEdit className='edit-btn' onClick={() => history.push('/updateuser', { id: m.codigo_user })} />}
                                 {isAdmin && (
-                                    <Popup trigger={<FiTrash id='deleteButton' />} position="center center" open={isOpen}>
+                                    <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button id='confDelete' onClick={() => deleteMsg(m.codigo_user.toString())}>Sim</button>
-                                        <button id='confDelete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
+                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_user.toString())}>Sim</button>
+                                        <button className='conf-delete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
                                     </Popup>
                                 )}
                             </div>
-                        </button>
+                        </div>
                     ))}
-                    <FiArrowDown id='carouselIcon' onClick={() => { if (Msg.length == 4 && page + 1 < Limit.length / 4) setPage(page + 1); }} />
+                    <FiArrowDown className='carousel-icon' onClick={() => { if (Msg.length === 4 && page + 1 < Limit.length / 4) setPage(page + 1); }} />
                 </div>
                 <div>
                     <h2 id='TitleBar'>Lista de users:</h2>
@@ -122,7 +122,7 @@ const UserBody: React.FC = () => {
                         </div>
                     </ul>
                 </div>
-            </body>
+            </div>
         </>
     );
 }
