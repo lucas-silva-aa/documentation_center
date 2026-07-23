@@ -8,6 +8,7 @@ import com.example.documentation_center.repositories.CardDAO;
 import com.example.documentation_center.services.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import java.time.LocalDate;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +31,9 @@ public class CardServices {
         if (cardDTO.getFolderDTO() != null && cardDTO.getFolderDTO().getKey() != null) {
             entity.setIdFolder(cardDTO.getFolderDTO().getKey());
         }
+        if (cardDTO.getIdBranch() != null) entity.setIdBranch(cardDTO.getIdBranch());
+        if (cardDTO.getIdUser() != null) entity.setIdUser(cardDTO.getIdUser());
+        if (entity.getDataHora() == null) entity.setDataHora(LocalDate.now());
         Card saved = cardDAO.save(entity);
         notificacaoServices.notificarAssinantes(saved);
         return new CardDTO(saved);

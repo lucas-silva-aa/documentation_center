@@ -80,13 +80,11 @@ public class UserServices implements UserDetailsService {
         var entity = userDAO.findById(user.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-       //entity.setId(entity.getId());
-        entity.setIdBranch(entity.getIdBranch());
-        entity.setNome(entity.getNome());
-        entity.setSenha(entity.getSenha());
-        entity.setDescricao(entity.getDescricao());
-        entity.setAdmin(entity.getAdmin());
-        entity.setDataHora(entity.getDataHora());
+        entity.setNome(user.getNome());
+        entity.setSenha(user.getSenha());
+        entity.setDescricao(user.getDescricao());
+        entity.setAdmin(user.getAdmin());
+        entity.setDataHora(user.getDataHora());
 
         var vo = DozerConverter.parseObject(userDAO.save(entity), UserDTO.class);
         return vo;

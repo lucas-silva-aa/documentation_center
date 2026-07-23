@@ -8,21 +8,23 @@ import com.example.documentation_center.repositories.BranchDAO;
 import com.example.documentation_center.repositories.FolderDAO;
 import com.example.documentation_center.repositories.UserDAO;
 import com.example.documentation_center.services.exceptions.BusinessException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
 public class FolderServices {
+    @Autowired
     private FolderDAO folderDAO;
-    //private BranchDAO branchDAO;
-    //private UserDAO userDAO;
 
     public FolderDTO create(FolderDTO folderDTO) {
         var entity = DozerConverter.parseObject(folderDTO, Folder.class);
+        if (entity.getDataHora() == null) entity.setDataHora(LocalDate.now());
         return DozerConverter.parseObject(folderDAO.save(entity), FolderDTO.class);
     }
 
@@ -60,11 +62,11 @@ public class FolderServices {
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
         //entity.setId(folder.getKey());
-        entity.setIdUser(folder.getIdUser());
-        entity.setIdBranch(folder.getIdBranch());
+        if (folder.getIdUser() != null) entity.setIdUser(folder.getIdUser());
+        if (folder.getIdBranch() != null) entity.setIdBranch(folder.getIdBranch());
         entity.setNome(folder.getNome());
         entity.setDescricao(folder.getDescricao());
-        entity.setDataHora(folder.getDataHora());
+        if (folder.getDataHora() != null) entity.setDataHora(folder.getDataHora());
 
         return DozerConverter.parseObject(folderDAO.save(entity), FolderDTO.class);
     }
