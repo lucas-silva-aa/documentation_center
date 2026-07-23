@@ -88,6 +88,7 @@ public class SecurityConfig {
                                 ).permitAll()
                                 .requestMatchers("/api/**").authenticated()
                                 .requestMatchers("/users").denyAll()
+                                .anyRequest().permitAll()
                 )
                 .cors(cors -> {})
                 .build();
