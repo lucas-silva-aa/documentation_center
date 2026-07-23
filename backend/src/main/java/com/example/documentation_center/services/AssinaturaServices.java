@@ -58,8 +58,8 @@ public class AssinaturaServices {
     }
 
     @Transactional(readOnly = true)
-    public List<Assinatura> listarPorUsuario(Integer userId) {
-        return assinaturaDAO.findByUserObjCodigo(userId);
+    public List<Assinatura> listarPorUsuario(Long userId) {
+        return assinaturaDAO.findByUserObjId(userId);
     }
 
     @Transactional(readOnly = true)

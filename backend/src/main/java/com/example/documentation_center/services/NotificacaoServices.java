@@ -48,13 +48,13 @@ public class NotificacaoServices {
     }
 
     @Transactional(readOnly = true)
-    public Page<Notificacao> listarPorUsuario(Integer userId, Pageable pageable) {
-        return notificacaoDAO.findByUserObjCodigoOrderByDataHoraDesc(userId, pageable);
+    public Page<Notificacao> listarPorUsuario(Long userId, Pageable pageable) {
+        return notificacaoDAO.findByUserObjIdOrderByDataHoraDesc(userId, pageable);
     }
 
     @Transactional(readOnly = true)
-    public long contarNaoLidas(Integer userId) {
-        return notificacaoDAO.countByUserObjCodigoAndLidaFalse(userId);
+    public long contarNaoLidas(Long userId) {
+        return notificacaoDAO.countByUserObjIdAndLidaFalse(userId);
     }
 
     @Transactional
@@ -66,7 +66,7 @@ public class NotificacaoServices {
     }
 
     @Transactional
-    public void marcarTodasComoLidas(Integer userId) {
+    public void marcarTodasComoLidas(Long userId) {
         notificacaoDAO.marcarTodasComoLidas(userId);
     }
 }

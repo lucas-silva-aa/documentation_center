@@ -26,7 +26,7 @@ public class NotificacaoController {
     @GetMapping("/usuario/{userId}")
     @Operation(summary = "Lista notificações de um usuário (paginado)")
     public ResponseEntity<Page<Notificacao>> listarPorUsuario(
-            @PathVariable Integer userId,
+            @PathVariable Long userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int limit) {
         Pageable pageable = PageRequest.of(page, limit);
@@ -35,7 +35,7 @@ public class NotificacaoController {
 
     @GetMapping("/usuario/{userId}/nao-lidas")
     @Operation(summary = "Conta notificações não lidas de um usuário")
-    public ResponseEntity<Map<String, Long>> contarNaoLidas(@PathVariable Integer userId) {
+    public ResponseEntity<Map<String, Long>> contarNaoLidas(@PathVariable Long userId) {
         long count = service.contarNaoLidas(userId);
         return ResponseEntity.ok(Map.of("naoLidas", count));
     }
@@ -49,7 +49,7 @@ public class NotificacaoController {
 
     @PatchMapping("/usuario/{userId}/lidas")
     @Operation(summary = "Marca todas as notificações do usuário como lidas")
-    public ResponseEntity<Void> marcarTodasComoLidas(@PathVariable Integer userId) {
+    public ResponseEntity<Void> marcarTodasComoLidas(@PathVariable Long userId) {
         service.marcarTodasComoLidas(userId);
         return ResponseEntity.noContent().build();
     }

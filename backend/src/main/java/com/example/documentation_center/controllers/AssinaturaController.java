@@ -25,7 +25,7 @@ public class AssinaturaController {
 
     @GetMapping("/usuario/{userId}")
     @Operation(summary = "Lista todas as assinaturas de um usuário")
-    public ResponseEntity<List<AssinaturaDTO>> listarPorUsuario(@PathVariable Integer userId) {
+    public ResponseEntity<List<AssinaturaDTO>> listarPorUsuario(@PathVariable Long userId) {
         List<AssinaturaDTO> dtos = service.listarPorUsuario(userId).stream()
                 .map(AssinaturaDTO::new).collect(java.util.stream.Collectors.toList());
         return ResponseEntity.ok(dtos);

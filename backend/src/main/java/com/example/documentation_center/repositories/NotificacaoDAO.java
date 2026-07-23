@@ -10,11 +10,11 @@ import org.springframework.data.repository.query.Param;
 
 public interface NotificacaoDAO extends JpaRepository<Notificacao, Integer> {
 
-    Page<Notificacao> findByUserObjCodigoOrderByDataHoraDesc(Integer userCodigo, Pageable pageable);
+    Page<Notificacao> findByUserObjIdOrderByDataHoraDesc(Long userId, Pageable pageable);
 
-    long countByUserObjCodigoAndLidaFalse(Integer userCodigo);
+    long countByUserObjIdAndLidaFalse(Long userId);
 
     @Modifying
-    @Query("UPDATE Notificacao n SET n.lida = true WHERE n.userObj.codigo = :userId AND n.lida = false")
-    void marcarTodasComoLidas(@Param("userId") Integer userId);
+    @Query("UPDATE Notificacao n SET n.lida = true WHERE n.userObj.id = :userId AND n.lida = false")
+    void marcarTodasComoLidas(@Param("userId") Long userId);
 }
