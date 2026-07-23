@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -13,9 +13,7 @@ interface Props {
 const uploadImage = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('arquivo', file);
-    const response = await api.post('/v1/ts/imagens', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-    });
+    const response = await api.post('/v1/ts/imagens', formData);
     return `http://localhost:8080/v1/ts/imagens/${response.data.id}`;
 };
 
@@ -77,6 +75,13 @@ const RichTextEditor: React.FC<Props> = ({ content, onChange }) => {
         };
         input.click();
     };
+
+    useEffect(() => {
+        if (!editor) return;
+        if (content !== editor.getHTML()) {
+            editor.commands.setContent(content, false);
+        }
+    }, [content, editor]);
 
     if (!editor) return null;
 

@@ -4,7 +4,7 @@ const Title = () => {
     return (
         <>
          
-     <h1>Documentation Center</h1>
+     <h1 className="page-title">Documentation Center</h1>
   
 
         </>

@@ -1,7 +1,6 @@
-h1{
-    
-    width: 100vmax;
-    padding:4vh 0.5vw 4vh 0vw;
+.page-title {
+    width: 100%;
+    padding: 4vh 0.5vw;
     display: flex;
     align-items: center;
     justify-content: center;
