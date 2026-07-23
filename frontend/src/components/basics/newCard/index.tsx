@@ -11,6 +11,8 @@ interface ifolder {
     nome_folder: string,
     descricao_folder: string,
     data_folder: string,
+    idBranch?: number,
+    idUser?: number,
 }
 
 const HomeBody: React.FC = () => {
@@ -44,9 +46,7 @@ const HomeBody: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append('arquivo', file);
-            const res = await api.post('/v1/ts/imagens', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            const res = await api.post('/v1/ts/imagens', formData);
             setThumbnailUrl(`http://localhost:8080/v1/ts/imagens/${res.data.id}`);
         } finally {
             setUploadingThumb(false);
@@ -89,15 +89,18 @@ const HomeBody: React.FC = () => {
             setPost(p => !p);
             return;
         }
+        const userId = Number(localStorage.getItem('userId') ?? 1);
         let flag2 = false;
-        await api.post('/v1/ts/cards/', {
+        await api.post('/v1/ts/cards', {
             nome_card: inputNome,
             descricao_card: inputDescricao,
             thumbnail_card: thumbnailUrl || null,
             resumo_card: resumo || null,
             tags_card: tags.length > 0 ? tags.join(',') : null,
             categoria_card: categoria || null,
-            folderDTO: selectedFolder,
+            folderDTO: { codigo_folder: selectedFolder.codigo_folder },
+            idBranch: selectedFolder.idBranch ?? null,
+            idUser: userId,
         }).then(response => response.data)
             .catch(async error => {
                 if (error.response) {
@@ -142,18 +145,17 @@ const HomeBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='CriarCardBody'>
+            <div id='CriarCardBody'>
                 <h2 id='TitleBar'>Cadastro de Card</h2>
                 <ul id='CardUl'>
                     <div id='CardForm'>
-                        <div id='divH1'>
-                            <h1>Nome*: </h1>
-                            <h1>Thumbnail: </h1>
-                            <h1>Folder*: </h1>
+                        <div className='form-row'>
+                            <span className='form-label'>Nome*:</span>
+                            <input type="text" value={inputNome} onChange={e => setInputNome(e.target.value)} required />
                         </div>
-                        <div id='divInput'>
-                            <input id='input' type="text" value={inputNome} onChange={e => setInputNome(e.target.value)} required />
 
+                        <div className='form-row'>
+                            <span className='form-label'>Thumbnail:</span>
                             <div id='thumbnail-upload'>
                                 <input type="file" accept="image/*" onChange={handleThumbnailChange} />
                                 {uploadingThumb && <span>Enviando...</span>}
@@ -161,9 +163,11 @@ const HomeBody: React.FC = () => {
                                     <img src={thumbnailPreview} alt="preview" id='thumbnail-preview' />
                                 )}
                             </div>
+                        </div>
 
+                        <div className='form-row'>
+                            <span className='form-label'>Folder*:</span>
                             <select
-                                id='input'
                                 value={selectedFolder?.codigo_folder ?? ''}
                                 onChange={e => {
                                     const found = folders.find(f => f.codigo_folder === Number(e.target.value));
@@ -231,7 +235,7 @@ const HomeBody: React.FC = () => {
 
                     <button type="submit" onClick={postMsg}>Cadastrar</button>
                 </ul>
-            </body>
+            </div>
         </>
     );
 };
