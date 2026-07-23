@@ -5,6 +5,7 @@ import './index.css'
 import React from 'react';
 import 'reactjs-popup/dist/index.css';
 import RichTextEditor from '../richTextEditor';
+import { useLocation, useHistory } from 'react-router-dom';
 
 interface ifolder {
     codigo_folder: number,
@@ -13,8 +14,10 @@ interface ifolder {
     data_folder: string,
 }
 
+interface LocationState { id?: number; }
+
 const HomeBody: React.FC = () => {
-    const [inputCodigo, setInputCodigo] = useState('');
+    const [inputCodigo, setInputCodigo] = useState<number | ''>('');
     const [inputNome, setInputNome] = useState('');
     const [inputDescricao, setInputDescricao] = useState('');
     const [thumbnailUrl, setThumbnailUrl] = useState('');
@@ -24,11 +27,30 @@ const HomeBody: React.FC = () => {
     const [selectedFolder, setSelectedFolder] = useState<ifolder | null>(null);
     const [post, setPost] = useState(false);
     const [descricao, setDescricao] = useState('');
+    const location = useLocation<LocationState>();
+    const history = useHistory();
 
     useEffect(() => {
-        api.get('/v1/ts/folders', { params: { limit: 100 } })
-            .then(res => setFolders(res.data?._embedded?.folderDTOList ?? []))
-            .catch(() => setFolders([]));
+        Promise.all([
+            api.get('/v1/ts/folders', { params: { limit: 100 } }),
+        ]).then(([folderRes]) => {
+            const list: ifolder[] = folderRes.data?._embedded?.folderDTOList ?? [];
+            setFolders(list);
+
+            const id = location.state?.id;
+            if (!id) return;
+            setInputCodigo(id);
+            api.get('/v1/ts/cards/' + id).then(cardRes => {
+                const d = cardRes.data;
+                setInputNome(d.nome_card ?? '');
+                setInputDescricao(d.descricao_card ?? '');
+                setThumbnailUrl(d.thumbnail_card ?? '');
+                if (d.thumbnail_card) setThumbnailPreview(d.thumbnail_card);
+                const fid = d.idFolder;
+                const found = list.find(f => f.codigo_folder === fid);
+                if (found) setSelectedFolder(found);
+            }).catch(() => {});
+        }).catch(() => {});
     }, []);
 
     const handleThumbnailChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +61,7 @@ const HomeBody: React.FC = () => {
         try {
             const formData = new FormData();
             formData.append('arquivo', file);
-            const res = await api.post('/v1/ts/imagens', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' },
-            });
+            const res = await api.post('/v1/ts/imagens', formData);
             setThumbnailUrl(`http://localhost:8080/v1/ts/imagens/${res.data.id}`);
         } finally {
             setUploadingThumb(false);
@@ -49,21 +69,26 @@ const HomeBody: React.FC = () => {
     };
 
     const postMsg = async () => {
+        if (!inputCodigo) {
+            setDescricao('Nenhum card selecionado para editar');
+            setPost(p => !p);
+            return;
+        }
         let flag2 = false;
         await api.put('/v1/ts/cards/' + inputCodigo, {
             nome_card: inputNome,
             descricao_card: inputDescricao,
             ...(thumbnailUrl ? { thumbnail_card: thumbnailUrl } : {}),
-            ...(selectedFolder ? { folderDTO: selectedFolder } : {}),
+            ...(selectedFolder ? { folderDTO: { codigo_folder: selectedFolder.codigo_folder } } : {}),
         }).then(response => response.data)
             .catch(async error => {
                 if (error.response) {
-                    await setDescricao(error.response.data.descricao);
+                    await setDescricao(error.response.data?.descricao ?? 'Erro ao atualizar');
                     flag2 = true;
                     setPost(p => !p);
                 }
             });
-        if (!flag2) window.location.reload();
+        if (!flag2) history.push('/');
     };
 
     useEffect(() => {
@@ -99,18 +124,16 @@ const HomeBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <body id='CriarUserBody'>
-                <h2 id='TitleBar'>Atualizar Card</h2>
+            <div id='CriarUserBody'>
+                <h2 id='TitleBar'>Atualizar Card {inputCodigo ? `#${inputCodigo}` : ''}</h2>
                 <ul id='UserUl'>
                     <div id='UserForm'>
                         <div id='divH1'>
-                            <h1>Id*: </h1>
                             <h1>Nome*: </h1>
                             <h1>Thumbnail: </h1>
                             <h1>Folder: </h1>
                         </div>
                         <div id='divInput'>
-                            <input id='input' type="text" value={inputCodigo} onChange={e => setInputCodigo(e.target.value)} required />
                             <input id='input' type="text" value={inputNome} onChange={e => setInputNome(e.target.value)} required />
 
                             <div id='thumbnail-upload'>
@@ -144,7 +167,7 @@ const HomeBody: React.FC = () => {
 
                     <button type="submit" onClick={postMsg}>Atualizar</button>
                 </ul>
-            </body>
+            </div>
         </>
     );
 };
