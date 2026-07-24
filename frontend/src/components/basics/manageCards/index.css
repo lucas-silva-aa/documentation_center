@@ -186,6 +186,23 @@
     line-height: 1.5;
 }
 
+#CardBody #CardUl #CardForm #divH1 #tags-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+    padding: 4px 0;
+}
+
+#CardBody #CardUl #CardForm #divH1 .tag-chip-view {
+    background-color: #e0e7ff;
+    color: #3730a3;
+    border-radius: 12px;
+    padding: 2px 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
 #popup-root div {
     position: absolute;
     top: 50%;

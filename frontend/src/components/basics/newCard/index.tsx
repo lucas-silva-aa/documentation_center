@@ -5,6 +5,7 @@ import React from 'react';
 import Alert from 'react-popup-alert'
 import 'reactjs-popup/dist/index.css';
 import RichTextEditor from '../richTextEditor';
+import { useHistory } from 'react-router-dom';
 
 interface ifolder {
     codigo_folder: number,
@@ -31,6 +32,7 @@ const HomeBody: React.FC = () => {
     const [tags, setTags] = useState<string[]>([]);
     const [categoria, setCategoria] = useState('');
     const [loadingTags, setLoadingTags] = useState(false);
+    const history = useHistory();
 
     useEffect(() => {
         api.get('/v1/ts/folders', { params: { limit: 100 } })
@@ -71,9 +73,11 @@ const HomeBody: React.FC = () => {
         setLoadingTags(true);
         try {
             const response = await api.post('/v1/ts/ia/sugestoes', { titulo: inputNome, conteudo: inputDescricao });
-            const json = JSON.parse(response.data);
-            setTags(json.tags || []);
-            setCategoria(json.categoria || '');
+            const raw = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+            const match = raw.match(/\{[\s\S]*\}/);
+            const json = match ? JSON.parse(match[0]) : null;
+            setTags(json?.tags || []);
+            setCategoria(json?.categoria || '');
         } catch {
             setTags([]); setCategoria('');
         } finally {
@@ -109,7 +113,7 @@ const HomeBody: React.FC = () => {
                     setPost(p => !p);
                 }
             });
-        if (!flag2) window.location.reload();
+        if (!flag2) history.push('/');
     };
 
     useEffect(() => {

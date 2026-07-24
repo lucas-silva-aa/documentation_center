@@ -230,7 +230,14 @@ const CardBody: React.FC = () => {
                                     <h1>Nome: {nome}</h1>
                                     {resumo && <h1>Resumo: {resumo}</h1>}
                                     {categoriaCard && <h1>Categoria: {categoriaCard}</h1>}
-                                    {tags && <h1>Tags: {tags}</h1>}
+                                    {tags && (
+                                        <div id='tags-display'>
+                                            <span>Tags: </span>
+                                            {tags.split(',').map(t => t.trim()).filter(Boolean).map(t => (
+                                                <span key={t} className='tag-chip-view'>{t}</span>
+                                            ))}
+                                        </div>
+                                    )}
                                     {thumbnailLink && (
                                         <img
                                             src={thumbnailLink}
