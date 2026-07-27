@@ -49,12 +49,12 @@ public class NotificacaoServices {
 
     @Transactional(readOnly = true)
     public Page<Notificacao> listarPorUsuario(Integer userId, Pageable pageable) {
-        return notificacaoDAO.findByUserObjCodigoOrderByDataHoraDesc(userId, pageable);
+        return notificacaoDAO.findByUserObjIdOrderByDataHoraDesc(userId, pageable);
     }
 
     @Transactional(readOnly = true)
     public long contarNaoLidas(Integer userId) {
-        return notificacaoDAO.countByUserObjCodigoAndLidaFalse(userId);
+        return notificacaoDAO.countByUserObjIdAndLidaFalse(userId);
     }
 
     @Transactional

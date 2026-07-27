@@ -7,19 +7,19 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface AssinaturaDAO extends JpaRepository<Assinatura, Long> {
+public interface AssinaturaDAO extends JpaRepository<Assinatura, Integer> {
 
-    List<Assinatura> findByUserObjCodigo(Long userCodigo);
+    List<Assinatura> findByUserObjId(Integer id);
 
-    @Query("SELECT a FROM Assinatura a WHERE a.branchObj.codigo = :branchId")
-    List<Assinatura> findByBranch(@Param("branchId") Long branchId);
+    @Query("SELECT a FROM Assinatura a WHERE a.branchObj.id = :branchId")
+    List<Assinatura> findByBranch(@Param("branchId") Integer branchId);
 
-    @Query("SELECT a FROM Assinatura a WHERE a.folderObj.codigo = :folderId")
-    List<Assinatura> findByFolder(@Param("folderId") Long folderId);
+    @Query("SELECT a FROM Assinatura a WHERE a.folderObj.id = :folderId")
+    List<Assinatura> findByFolder(@Param("folderId") Integer folderId);
 
-    @Query("SELECT COUNT(a) > 0 FROM Assinatura a WHERE a.userObj.codigo = :userId AND a.branchObj.codigo = :branchId")
-    boolean existsByUserAndBranch(@Param("userId") Long userId, @Param("branchId") Long branchId);
+    @Query("SELECT COUNT(a) > 0 FROM Assinatura a WHERE a.userObj.id = :userId AND a.branchObj.id = :branchId")
+    boolean existsByUserAndBranch(@Param("userId") Integer userId, @Param("branchId") Integer branchId);
 
-    @Query("SELECT COUNT(a) > 0 FROM Assinatura a WHERE a.userObj.codigo = :userId AND a.folderObj.codigo = :folderId")
-    boolean existsByUserAndFolder(@Param("userId") Long userId, @Param("folderId") Long folderId);
+    @Query("SELECT COUNT(a) > 0 FROM Assinatura a WHERE a.userObj.id = :userId AND a.folderObj.id = :folderId")
+    boolean existsByUserAndFolder(@Param("userId") Integer userId, @Param("folderId") Integer folderId);
 }

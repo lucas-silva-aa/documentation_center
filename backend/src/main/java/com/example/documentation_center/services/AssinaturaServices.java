@@ -30,7 +30,7 @@ public class AssinaturaServices {
     }
 
     @Transactional
-    public Assinatura assinarBranch(Long userId, Long branchId) {
+    public Assinatura assinarBranch(Integer userId, Integer branchId) {
         if (assinaturaDAO.existsByUserAndBranch(userId, branchId)) {
             throw new BusinessException("Usuário já assina esse time.");
         }
@@ -40,7 +40,7 @@ public class AssinaturaServices {
     }
 
     @Transactional
-    public Assinatura assinarFolder(Long userId, Long folderId) {
+    public Assinatura assinarFolder(Integer userId, Integer folderId) {
         if (assinaturaDAO.existsByUserAndFolder(userId, folderId)) {
             throw new BusinessException("Usuário já assina esse sistema.");
         }
@@ -50,7 +50,7 @@ public class AssinaturaServices {
     }
 
     @Transactional
-    public void cancelarAssinatura(Long assinaturaId) {
+    public void cancelarAssinatura(Integer assinaturaId) {
         if (!assinaturaDAO.existsById(assinaturaId)) {
             throw new BusinessException("Assinatura não encontrada.");
         }
@@ -58,17 +58,17 @@ public class AssinaturaServices {
     }
 
     @Transactional(readOnly = true)
-    public List<Assinatura> listarPorUsuario(Long userId) {
-        return assinaturaDAO.findByUserObjCodigo(userId);
+    public List<Assinatura> listarPorUsuario(Integer userId) {
+        return assinaturaDAO.findByUserObjId(userId);
     }
 
     @Transactional(readOnly = true)
-    public List<Assinatura> listarPorBranch(Long branchId) {
+    public List<Assinatura> listarPorBranch(Integer branchId) {
         return assinaturaDAO.findByBranch(branchId);
     }
 
     @Transactional(readOnly = true)
-    public List<Assinatura> listarPorFolder(Long folderId) {
+    public List<Assinatura> listarPorFolder(Integer folderId) {
         return assinaturaDAO.findByFolder(folderId);
     }
 }

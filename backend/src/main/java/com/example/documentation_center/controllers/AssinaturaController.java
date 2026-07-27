@@ -25,7 +25,7 @@ public class AssinaturaController {
 
     @GetMapping("/usuario/{userId}")
     @Operation(summary = "Lista todas as assinaturas de um usuário")
-    public ResponseEntity<List<AssinaturaDTO>> listarPorUsuario(@PathVariable Long userId) {
+    public ResponseEntity<List<AssinaturaDTO>> listarPorUsuario(@PathVariable Integer userId) {
         List<AssinaturaDTO> dtos = service.listarPorUsuario(userId).stream()
                 .map(AssinaturaDTO::new).collect(java.util.stream.Collectors.toList());
         return ResponseEntity.ok(dtos);
@@ -34,24 +34,24 @@ public class AssinaturaController {
     @PostMapping("/branch")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Assina um time (branch)")
-    public ResponseEntity<Assinatura> assinarBranch(@RequestBody Map<String, Long> body) {
-        Long userId = body.get("userId");
-        Long branchId = body.get("branchId");
+    public ResponseEntity<Assinatura> assinarBranch(@RequestBody Map<String, Integer> body) {
+        Integer userId = body.get("userId");
+        Integer branchId = body.get("branchId");
         return ResponseEntity.status(HttpStatus.CREATED).body(service.assinarBranch(userId, branchId));
     }
 
     @PostMapping("/folder")
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Assina um sistema (folder)")
-    public ResponseEntity<Assinatura> assinarFolder(@RequestBody Map<String, Long> body) {
-        Long userId = body.get("userId");
-        Long folderId = body.get("folderId");
+    public ResponseEntity<Assinatura> assinarFolder(@RequestBody Map<String, Integer> body) {
+        Integer userId = body.get("userId");
+        Integer folderId = body.get("folderId");
         return ResponseEntity.status(HttpStatus.CREATED).body(service.assinarFolder(userId, folderId));
     }
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Cancela uma assinatura")
-    public ResponseEntity<Void> cancelar(@PathVariable Long id) {
+    public ResponseEntity<Void> cancelar(@PathVariable Integer id) {
         service.cancelarAssinatura(id);
         return ResponseEntity.noContent().build();
     }
