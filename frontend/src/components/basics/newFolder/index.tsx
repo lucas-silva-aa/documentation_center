@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import api from "../../../services/api";
+// @ts-ignore
 import './index.css'
 import React from 'react';
 import Alert from 'react-popup-alert'
+// @ts-ignore
 import 'reactjs-popup/dist/index.css';
 
 interface iuser {

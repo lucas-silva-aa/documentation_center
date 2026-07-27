@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import api from "../../../services/api";
 import React from 'react'
 import Alert from 'react-popup-alert'
+// @ts-ignore
 import '../manageScorePage/index.css'
 import { FiArrowDown, FiArrowUp, FiEdit, FiTrash, FiSearch } from "react-icons/fi";
 import { useHistory } from "react-router-dom";

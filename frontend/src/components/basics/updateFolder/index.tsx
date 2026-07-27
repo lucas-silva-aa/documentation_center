@@ -3,9 +3,11 @@ import api from "../../../services/api";
 import { FiArrowLeft, FiArrowRight } from "react-icons/fi";
 import Form from "react-bootstrap";
 import Alert from 'react-popup-alert'
+// @ts-ignore
 import './index.css'
 import React from 'react';
 import Popup from 'reactjs-popup';
+// @ts-ignore
 import 'reactjs-popup/dist/index.css';
 
 interface iuser {
