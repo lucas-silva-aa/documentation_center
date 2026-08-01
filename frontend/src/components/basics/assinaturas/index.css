@@ -22,11 +22,18 @@
     min-width: 200px;
 }
 
-#input-assinar {
+#select-assinar {
     padding: 6px 10px;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 14px;
+    background: #fff;
+    cursor: pointer;
+}
+
+#btn-assinar:disabled {
+    background: #90caf9;
+    cursor: not-allowed;
 }
 
 #btn-assinar {

@@ -9,12 +9,15 @@ interface IAssinatura {
     folderObj: { codigo: number; nome: string } | null;
     dataHora: string;
 }
+interface IBranch { id: number; nome: string; }
+interface IFolder { id: number; nome: string; }
 
 const AssinaturasBody: React.FC = () => {
     const [assinaturas, setAssinaturas] = useState<IAssinatura[]>([]);
+    const [branches, setBranches] = useState<IBranch[]>([]);
+    const [folders, setFolders] = useState<IFolder[]>([]);
     const [loading, setLoading] = useState(true);
 
-    // inputs para nova assinatura
     const [branchId, setBranchId] = useState('');
     const [folderId, setFolderId] = useState('');
     const [mensagem, setMensagem] = useState('');
@@ -29,6 +32,21 @@ const AssinaturasBody: React.FC = () => {
             setAssinaturas(res.data || []);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const carregarOpcoes = async () => {
+        try {
+            const [bRes, fRes] = await Promise.all([
+                api.get('/v1/ts/branchs', { params: { page: 0, limit: 100, direction: 'asc' } }),
+                api.get('/v1/ts/folders', { params: { page: 0, limit: 100, direction: 'asc' } }),
+            ]);
+            const bList = bRes.data?._embedded?.branchDTOList ?? [];
+            const fList = fRes.data?._embedded?.folderDTOList ?? [];
+            setBranches(bList.map((b: any) => ({ id: b.codigo_branch, nome: b.nome_branch })));
+            setFolders(fList.map((f: any) => ({ id: f.codigo_folder, nome: f.nome_folder })));
+        } catch {
+            // silently ignore — dropdowns just stay empty
         }
     };
 
@@ -61,7 +79,7 @@ const AssinaturasBody: React.FC = () => {
         setAssinaturas(prev => prev.filter(a => a.codigo !== id));
     };
 
-    useEffect(() => { carregar(); }, []);
+    useEffect(() => { carregar(); carregarOpcoes(); }, []);
 
     if (!userId) {
         return <p id='sem-login'>Faça login para gerenciar suas assinaturas.</p>;
@@ -76,25 +94,31 @@ const AssinaturasBody: React.FC = () => {
             <div id='assinar-form'>
                 <div className='assinar-bloco'>
                     <h4>Assinar Time (Branch)</h4>
-                    <input
-                        type="number"
-                        placeholder="ID do Time"
+                    <select
+                        id='select-assinar'
                         value={branchId}
                         onChange={e => setBranchId(e.target.value)}
-                        id='input-assinar'
-                    />
-                    <button onClick={assinarBranch} id='btn-assinar'>Assinar</button>
+                    >
+                        <option value=''>Selecione um time...</option>
+                        {branches.map(b => (
+                            <option key={b.id} value={b.id}>{b.nome}</option>
+                        ))}
+                    </select>
+                    <button onClick={assinarBranch} id='btn-assinar' disabled={!branchId}>Assinar</button>
                 </div>
                 <div className='assinar-bloco'>
                     <h4>Assinar Sistema (Folder)</h4>
-                    <input
-                        type="number"
-                        placeholder="ID do Sistema"
+                    <select
+                        id='select-assinar'
                         value={folderId}
                         onChange={e => setFolderId(e.target.value)}
-                        id='input-assinar'
-                    />
-                    <button onClick={assinarFolder} id='btn-assinar'>Assinar</button>
+                    >
+                        <option value=''>Selecione um sistema...</option>
+                        {folders.map(f => (
+                            <option key={f.id} value={f.id}>{f.nome}</option>
+                        ))}
+                    </select>
+                    <button onClick={assinarFolder} id='btn-assinar' disabled={!folderId}>Assinar</button>
                 </div>
             </div>
 
