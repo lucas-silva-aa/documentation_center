@@ -61,6 +61,7 @@ const CardBody: React.FC = () => {
     const [page, setPage] = useState(0);
     const [busca, setBusca] = useState('');
     const [categoria, setCategoria] = useState('');
+    const [buscaTag, setBuscaTag] = useState('');
     const [codigo, setCodigo] = useState('');
     const [nome, setNome] = useState('');
     const [thumbnailLink, setThumbnailLink] = useState('');
@@ -88,7 +89,8 @@ const CardBody: React.FC = () => {
             const params: any = { page, limit: PAGE_SIZE, direction, ordenation };
             if (busca) params.nome = busca;
             if (categoria) params.categoria = categoria;
-            const endpoint = (busca || categoria) ? '/v1/ts/cards/pesquisa' : '/v1/ts/cards';
+            if (buscaTag) params.tag = buscaTag;
+            const endpoint = (busca || categoria || buscaTag) ? '/v1/ts/cards/pesquisa' : '/v1/ts/cards';
             try {
                 const response = await api.get(endpoint, { params });
                 const embedded = response.data?._embedded?.cardDTOList;
@@ -100,9 +102,9 @@ const CardBody: React.FC = () => {
             }
         };
         loadMsg();
-    }, [page, busca, categoria]);
+    }, [page, busca, categoria, buscaTag]);
 
-    useEffect(() => { setPage(0); }, [busca, categoria]);
+    useEffect(() => { setPage(0); }, [busca, categoria, buscaTag]);
 
     const showAlert = (msg: string) => {
         alertMsg.current = msg;
@@ -195,6 +197,12 @@ const CardBody: React.FC = () => {
                                 <option key={c} value={c}>{c || 'Todas as categorias'}</option>
                             ))}
                         </select>
+                        <input
+                            id='searchInput'
+                            placeholder='Buscar por tag...'
+                            value={buscaTag}
+                            onChange={e => setBuscaTag(e.target.value)}
+                        />
                     </div>
 
                     <FiArrowUp className='carousel-icon' onClick={() => { if (page > 0) setPage(page - 1); }} />

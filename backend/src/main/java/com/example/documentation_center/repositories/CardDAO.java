@@ -25,4 +25,9 @@ public interface CardDAO extends JpaRepository<Card, Long> {
     Page<Card> findByNomeContainsIgnoreCase(String searchTerm, Pageable pageable);
     Page<Card> findByNomeContainsIgnoreCaseAndCategoriaIgnoreCase(String nome, String categoria, Pageable pageable);
     Page<Card> findByCategoriaIgnoreCase(String categoria, Pageable pageable);
+
+    Page<Card> findByTagsContainingIgnoreCase(String tag, Pageable pageable);
+    Page<Card> findByNomeContainsIgnoreCaseAndTagsContainingIgnoreCase(String nome, String tag, Pageable pageable);
+    Page<Card> findByCategoriaIgnoreCaseAndTagsContainingIgnoreCase(String categoria, String tag, Pageable pageable);
+    Page<Card> findByNomeContainsIgnoreCaseAndCategoriaIgnoreCaseAndTagsContainingIgnoreCase(String nome, String categoria, String tag, Pageable pageable);
 }

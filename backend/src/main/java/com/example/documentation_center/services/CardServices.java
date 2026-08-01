@@ -66,16 +66,25 @@ public class CardServices {
     }
 
     @Transactional(readOnly = true)
-    public Page<CardDTO> pesquisar(String nome, String categoria, Pageable pageable) {
+    public Page<CardDTO> pesquisar(String nome, String categoria, String tag, Pageable pageable) {
         boolean temNome = nome != null && !nome.isBlank();
         boolean temCategoria = categoria != null && !categoria.isBlank();
+        boolean temTag = tag != null && !tag.isBlank();
         Page<Card> result;
-        if (temNome && temCategoria) {
+        if (temNome && temCategoria && temTag) {
+            result = cardDAO.findByNomeContainsIgnoreCaseAndCategoriaIgnoreCaseAndTagsContainingIgnoreCase(nome, categoria, tag, pageable);
+        } else if (temNome && temCategoria) {
             result = cardDAO.findByNomeContainsIgnoreCaseAndCategoriaIgnoreCase(nome, categoria, pageable);
+        } else if (temNome && temTag) {
+            result = cardDAO.findByNomeContainsIgnoreCaseAndTagsContainingIgnoreCase(nome, tag, pageable);
+        } else if (temCategoria && temTag) {
+            result = cardDAO.findByCategoriaIgnoreCaseAndTagsContainingIgnoreCase(categoria, tag, pageable);
         } else if (temNome) {
             result = cardDAO.findByNomeContainsIgnoreCase(nome, pageable);
         } else if (temCategoria) {
             result = cardDAO.findByCategoriaIgnoreCase(categoria, pageable);
+        } else if (temTag) {
+            result = cardDAO.findByTagsContainingIgnoreCase(tag, pageable);
         } else {
             result = cardDAO.findAll(pageable);
         }
