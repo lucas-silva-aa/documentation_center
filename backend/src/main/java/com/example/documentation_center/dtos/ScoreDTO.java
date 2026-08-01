@@ -5,11 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.github.dozermapper.core.Mapping;
 import org.springframework.hateoas.RepresentationModel;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -23,6 +18,7 @@ public class ScoreDTO extends RepresentationModel<ScoreDTO> implements Serializa
     private Long key;
     private String nomeLogin;
     private String time;
+    private String sistema;
     private Integer pontos;
     private LocalDate dataHora;
 
@@ -55,6 +51,14 @@ public class ScoreDTO extends RepresentationModel<ScoreDTO> implements Serializa
         this.time = time;
     }
 
+    public String getSistema() {
+        return sistema;
+    }
+
+    public void setSistema(String sistema) {
+        this.sistema = sistema;
+    }
+
     public Integer getPontos() {
         return pontos;
     }
@@ -75,11 +79,11 @@ public class ScoreDTO extends RepresentationModel<ScoreDTO> implements Serializa
     public boolean equals(Object o) {
         if (!(o instanceof ScoreDTO scoreDTO)) return false;
         if (!super.equals(o)) return false;
-        return Objects.equals(getKey(), scoreDTO.getKey()) && Objects.equals(getNomeLogin(), scoreDTO.getNomeLogin()) && Objects.equals(getTime(), scoreDTO.getTime()) && Objects.equals(getPontos(), scoreDTO.getPontos()) && Objects.equals(getDataHora(), scoreDTO.getDataHora());
+        return Objects.equals(getKey(), scoreDTO.getKey()) && Objects.equals(getNomeLogin(), scoreDTO.getNomeLogin()) && Objects.equals(getTime(), scoreDTO.getTime()) && Objects.equals(getSistema(), scoreDTO.getSistema()) && Objects.equals(getPontos(), scoreDTO.getPontos()) && Objects.equals(getDataHora(), scoreDTO.getDataHora());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getKey(), getNomeLogin(), getTime(), getPontos(), getDataHora());
+        return Objects.hash(super.hashCode(), getKey(), getNomeLogin(), getTime(), getSistema(), getPontos(), getDataHora());
     }
 }

@@ -27,13 +27,17 @@ public class Score implements Serializable {
     @Column(name = "time", nullable = false)
     private String time;
 
+    @Column(name = "sistema", nullable = false)
+    private String sistema;
+
     @Column(name = "data", nullable = false)
     private LocalDate dataHora;
 
-    public Score(Long id, String nomeLogin, Integer pontos, String time) {
+    public Score(Long id, String nomeLogin, Integer pontos, String time, String sistema) {
         this.id = id;
         this.nomeLogin = nomeLogin;
         this.pontos = pontos;
+        this.sistema = sistema;
         this.time = time;
         this.dataHora = LocalDate.now();
     }
@@ -74,6 +78,14 @@ public class Score implements Serializable {
         this.time = time;
     }
 
+    public String getSistema() {
+        return sistema;
+    }
+
+    public void setSistema(String sistema) {
+        this.sistema = sistema;
+    }
+
     public LocalDate getDataHora() {
         return dataHora;
     }
@@ -85,12 +97,12 @@ public class Score implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Score score)) return false;
-        return Objects.equals(getId(), score.getId()) && Objects.equals(getNomeLogin(), score.getNomeLogin()) && Objects.equals(getPontos(), score.getPontos()) && Objects.equals(getTime(), score.getTime()) && Objects.equals(getDataHora(), score.getDataHora());
+        return Objects.equals(getId(), score.getId()) && Objects.equals(getNomeLogin(), score.getNomeLogin()) && Objects.equals(getPontos(), score.getPontos()) && Objects.equals(getTime(), score.getTime()) && Objects.equals(getSistema(), score.getSistema()) && Objects.equals(getDataHora(), score.getDataHora());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNomeLogin(), getPontos(), getTime(), getDataHora());
+        return Objects.hash(getId(), getNomeLogin(), getPontos(), getTime(), getSistema(), getDataHora());
     }
 }
 

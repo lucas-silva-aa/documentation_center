@@ -58,6 +58,7 @@ public class ScoreServices {
         entity.setNomeLogin(score.getNomeLogin());
         entity.setTime(score.getTime());
         entity.setPontos(score.getPontos());
+        entity.setSistema(score.getSistema());
         entity.setDataHora(score.getDataHora());
 
         return DozerConverter.parseObject(scoreDAO.save(entity), ScoreDTO.class);

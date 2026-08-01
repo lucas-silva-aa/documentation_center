@@ -8,41 +8,12 @@ import { FiArrowDown, FiArrowUp, FiEdit, FiTrash, FiSearch } from "react-icons/f
 import { useHistory } from "react-router-dom";
 import Popup from "reactjs-popup";
 
-interface iuser {
-    codigo_user: number,
-    nome_user: string,
-    descricao_user: string,
-    senha_user: string,
-    admin_user: string,
-    data_user: string,
-    _links_user: i_links
-}
-interface ibranch {
-    codigo_branch: number,
-    nome_branch: string,
-    descricao_branch: string,
-    data_branch: string,
-    userDTO: iuser,
-    _links_branch: i_links
-}
-interface ifolder {
-    codigo_folder: number,
-    nome_folder: string,
-    descricao_folder: string,
-    data_folder: string,
-    branchDTO: ibranch,
-    _links_folder: i_links
-}
-interface icard {
-    codigo_card: number,
-    nome_card: string,
-    descricao_card: string,
-    thumbnail_card: string,
-    data_card: string,
-    resumo_card: string,
-    tags_card: string,
-    categoria_card: string,
-    folderDTO: ifolder,
+interface iScore{
+    nomeLogin: string,
+    pontos: number,
+    time: string,
+    sistema: string,
+    dataHora: string,
     _links_card: i_links
 }
 interface i_links {
@@ -54,29 +25,20 @@ interface iself {
 
 const CATEGORIAS = ['', 'API', 'Banco de Dados', 'DevOps', 'Frontend', 'Infraestrutura', 'Segurança'];
 
-const CardBody: React.FC = () => {
-    const [Msg, setMsg] = useState<icard[]>([]);
-    const [totalCards, setTotalCards] = useState(0);
+const ScoreBody: React.FC = () => {
+    const [Msg, setMsg] = useState<iScore[]>([]);
+    const [totalScores, setTotalScores] = useState(0);
     const [direction] = useState('desc');
     const [ordenation] = useState('codigo');
     const [page, setPage] = useState(0);
     const [busca, setBusca] = useState('');
     const [categoria, setCategoria] = useState('');
     const [codigo, setCodigo] = useState('');
-    const [nome, setNome] = useState('');
-    const [thumbnailLink, setThumbnailLink] = useState('');
-    const [data, setData] = useState('');
-    const [folderId, setFolderId] = useState('');
-    const [folderNome, setFolderNome] = useState('');
-    const [branchId, setBranchId] = useState('');
-    const [branchNome, setBranchNome] = useState('');
-    const [userId, setUserId] = useState('');
-    const [userNome, setUserNome] = useState('');
-    const [descricao2, setDescricao2] = useState('');
-    const [resumo, setResumo] = useState('');
-    const [tags, setTags] = useState('');
-    const [categoriaCard, setCategoriaCard] = useState('');
-    const [isOpen, setIsOpen] = useState(false);
+    const [nomeLogin, setNomeLogin] = useState('');
+    const [time, setTime] = useState('');
+    const [sistema, setSistema] = useState('');
+    const [dataHora, setDataHora] = useState('');
+    const [pontos, setPontos] = useState(0);
     const alertMsg = useRef('');
     const [alertState, setAlertState] = useState({ show: false, text: '' });
     const isAdmin = localStorage.getItem('admin') === 'true';
@@ -89,15 +51,15 @@ const CardBody: React.FC = () => {
             const params: any = { page, limit: PAGE_SIZE, direction, ordenation };
             if (busca) params.nome = busca;
             if (categoria) params.categoria = categoria;
-            const endpoint = (busca || categoria) ? '/v1/ts/cards/pesquisa' : '/v1/ts/cards';
+            const endpoint = (busca || categoria) ? '/v1/ts/scores/pesquisa' : '/v1/ts/scores';
             try {
                 const response = await api.get(endpoint, { params });
-                const embedded = response.data?._embedded?.cardDTOList;
+                const embedded = response.data?._embedded?.scoreDTOList;
                 setMsg(embedded ?? []);
-                setTotalCards(response.data?.page?.totalElements ?? (embedded?.length ?? 0));
+                setTotalScores(response.data?.page?.totalElements ?? (embedded?.length ?? 0));
             } catch {
                 setMsg([]);
-                setTotalCards(0);
+                setTotalScores(0);
             }
         };
         loadMsg();
@@ -111,39 +73,14 @@ const CardBody: React.FC = () => {
         setAlertState({ show: true, text: msg });
     };
 
-    const deleteMsg = async (id: string) => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
-        await api.delete('/v1/ts/cards/' + id);
-        window.location.reload();
-    };
-
-    const updateMsg = () => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
-        history.push('/updateCard');
-    };
-
-    const criarNovo = () => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
-        history.push('/newcard');
-    };
-
     const ExibirMsg = async (id: string) => {
-        const response = await api.get('/v1/ts/cards/' + id);
+        const response = await api.get('/v1/ts/scores/' + id);
         const d = response.data;
-        setCodigo(d.codigo_card);
-        setNome(d.nome_card);
-        setDescricao2(d.descricao_card);
-        setThumbnailLink(d.thumbnail_card);
-        setData(d.data_card);
-        setResumo(d.resumo_card ?? '');
-        setTags(d.tags_card ?? '');
-        setCategoriaCard(d.categoria_card ?? '');
-        setFolderId(d.folderDTO.codigo_folder);
-        setFolderNome(d.folderDTO.nome_folder);
-        setBranchId(d.folderDTO.branchDTO.codigo_branch);
-        setBranchNome(d.folderDTO.branchDTO.nome_branch);
-        setUserId(d.folderDTO.branchDTO.userDTO.codigo_user);
-        setUserNome(d.folderDTO.branchDTO.userDTO.nome_user);
+        setNomeLogin(d.nomeLogin);
+        setPontos(d.pontos);
+        setDataHora(d.dataHora);
+        setSistema(d.sistema);
+        setTime(d.time);
     };
 
     return (
@@ -171,80 +108,45 @@ const CardBody: React.FC = () => {
                 }}
             />
             <body id='ScoreBody'>
-                <div id='sidebar'>
-                    {isAdmin && <button id='newObj' onClick={criarNovo}>Criar novo</button>}
-
-                    <div id='searchBar'>
-                        <FiSearch id='searchIcon' />
-                        <input
-                            id='searchInput'
-                            placeholder='Buscar por nome...'
-                            value={busca}
-                            onChange={e => setBusca(e.target.value)}
-                        />
-                        <select
-                            id='categoriaSelect'
-                            value={categoria}
-                            onChange={e => setCategoria(e.target.value)}
-                        >
-                            {CATEGORIAS.map(c => (
-                                <option key={c} value={c}>{c || 'Todas as categorias'}</option>
-                            ))}
-                        </select>
-                    </div>
-
-                    <FiArrowUp id='carouselIcon' onClick={() => { if (page > 0) setPage(page - 1); }} />
-                    {Msg.map(m => (
-                        <button id='buttons' key={m.codigo_card}>
-                            <button id='text' onClick={() => ExibirMsg(m.codigo_card.toString())}>
-                                <h6>{m.nome_card}</h6>
-                                {m.resumo_card && <h4>{m.resumo_card}</h4>}
-                            </button>
-                            <div id='iconsButtons'>
-                                {isAdmin && <FiEdit id='editButton' onClick={updateMsg} />}
-                                {isAdmin && (
-                                    <Popup trigger={<FiTrash id='deleteButton' />} position="center center" open={isOpen}>
-                                        <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button id='confDelete' onClick={() => deleteMsg(m.codigo_card.toString())}>Sim</button>
-                                        <button id='confDelete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
-                                    </Popup>
-                                )}
-                            </div>
-                        </button>
-                    ))}
-                    <FiArrowDown id='carouselIcon' onClick={() => {
-                        if (Msg.length === PAGE_SIZE && (page + 1) * PAGE_SIZE < totalCards) setPage(page + 1);
-                    }} />
-                </div>
                 <div>
-                    <h2 id='TitleBar'>Lista de cards:</h2>
-                    <ul id='CardUl'>
-                        <div id='CardForm'>
-                            <div id='divH1'>
-                                <li>
-                                    <h1>Id do Card: {codigo}</h1>
-                                    <h1>Nome: {nome}</h1>
-                                    {resumo && <h1>Resumo: {resumo}</h1>}
-                                    {categoriaCard && <h1>Categoria: {categoriaCard}</h1>}
-                                    {tags && <h1>Tags: {tags}</h1>}
-                                    <h1>Thumbnail Link: {thumbnailLink}</h1>
-                                    {descricao2 && (
-                                        <div id='descricao-html' dangerouslySetInnerHTML={{ __html: descricao2 }} />
-                                    )}
-                                    <h1>Data: {data}</h1>
-                                    <h1>Folder Id: {folderId}</h1>
-                                    <h1>Folder Nome: {folderNome}</h1>
-                                    <h1>Branch Id: {branchId}</h1>
-                                    <h1>Branch Nome: {branchNome}</h1>
-                                    <h1>User Id: {userId}</h1>
-                                    <h1>User Nome: {userNome}</h1>
-                                </li>
-                            </div>
+                    <h1 id='TitleBar'>Análise de colaboradores:</h1>
+                    <ul id='ScoreUl'>
+                        <div id='ScoreForm'>
+                            <h2 id='TitleBar'>Score dos colaboradores:</h2>
+                            {Msg.map(m => (
+                                <>  
+                                <div id='divH1'>
+                                    <h3>Nome:</h3>
+                                    <h3> Pontuação:</h3>
+                                </div>
+                                <div id='divH2'>
+                                    <h3>{m.nomeLogin}:</h3>
+                                    <h3>{m.pontos}</h3>
+                                </div>
+                                <h2 id='TitleBar'>Score dos times:</h2>
+                                <div id='divH1'>
+                                    <h3>Nome:</h3>
+                                    <h3> Pontuação:</h3>
+                                </div>
+                                <div id='divH2'>
+                                    <h3>{m.time}:</h3>
+                                    <h3>{m.pontos}</h3>
+                                </div>
+                                <h2 id='TitleBar'>Score dos sistemas:</h2>
+                                <div id='divH1'>
+                                    <h3>Nome:</h3>
+                                    <h3> Pontuação:</h3>
+                                </div><div id='divH2'>
+                                    <h3>{m.sistema}:</h3>
+                                    <h3>{m.pontos}</h3>
+                                </div>
+                                </>
+                            ))}
                         </div>
-                    </ul>
+                    </ul>                    
                 </div>
             </body>
         </>
     );
 }
-export default CardBody;
+export default ScoreBody;
