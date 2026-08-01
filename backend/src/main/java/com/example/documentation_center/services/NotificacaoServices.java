@@ -27,22 +27,23 @@ public class NotificacaoServices {
 
     @Transactional
     public void notificarAssinantes(Card card) {
-        Integer branchId = card.getIdBranch().intValue();
-        Integer folderId = card.getIdFolder().intValue();
         String mensagem = String.format("Nova documentação publicada: \"%s\"", card.getNome());
 
-        List<User> assinantesDoTime = assinaturaDAO.findByBranch(branchId)
-                .stream().map(a -> a.getUserObj()).collect(Collectors.toList());
+        List<User> assinantes = new java.util.ArrayList<>();
 
-        List<User> assinantesDaSistema = assinaturaDAO.findByFolder(folderId)
-                .stream().map(a -> a.getUserObj()).collect(Collectors.toList());
+        if (card.getIdBranch() != null) {
+            assinaturaDAO.findByBranch(card.getIdBranch().intValue())
+                    .stream().map(a -> a.getUserObj()).forEach(assinantes::add);
+        }
 
-        // União sem duplicatas
-        assinantesDoTime.stream()
-                .filter(u -> assinantesDaSistema.stream().noneMatch(u2 -> u2.getId().equals(u.getId())))
-                .forEach(assinantesDaSistema::add);
+        if (card.getIdFolder() != null) {
+            assinaturaDAO.findByFolder(card.getIdFolder().intValue()).stream()
+                    .map(a -> a.getUserObj())
+                    .filter(u -> assinantes.stream().noneMatch(u2 -> u2.getId().equals(u.getId())))
+                    .forEach(assinantes::add);
+        }
 
-        assinantesDaSistema.forEach(user ->
+        assinantes.forEach(user ->
                 notificacaoDAO.save(new Notificacao(user, card, mensagem))
         );
     }

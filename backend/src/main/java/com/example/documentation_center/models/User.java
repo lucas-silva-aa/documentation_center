@@ -1,9 +1,9 @@
 package com.example.documentation_center.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -24,6 +24,7 @@ public class User implements Serializable, UserDetails {
     @Column(name = "descricao")
     private String descricao;
 
+    @JsonIgnore
     @Column(name = "senha", nullable = false)
     private String senha;
 
