@@ -1,67 +1,77 @@
+/* ── Layout ──────────────────────────────────────────── */
 #CriarUserBody {
-    width: 60vw;
+    width: min(92vw, 720px);
     min-height: 50vh;
-    height: auto;
-    padding: 5vh 0;
-    margin: 0 20vw;
+    padding: 28px 0 40px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 #CriarUserBody #TitleBar {
-    border-radius: 8px 8px 0 0;
-    width: 35vw;
-    height: auto;
-    background-color: #C4C4C4;
-    font-size: 20px;
-    padding: 10px 0 10px 20px;
-    margin: 0 0 0 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 20px;
+    color: var(--text);
+    width: 100%;
+    margin: 0;
 }
 
 #CriarUserBody #UserUl {
-    width: 35vw;
-    height: auto;
-    margin: 0 0 0 20px;
-    padding: 16px 0 20px 0;
-    border-radius: 0 0 8px 8px;
-    border: 3px solid #C4C4C4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
+    width: 100%;
+    height: auto;
+    margin: 0;
 }
 
+/* ── Form rows ────────────────────────────────────────── */
 #CriarUserBody #UserUl #UserForm {
     display: flex;
     flex-direction: row;
-    padding: 8px 0;
-    margin: 0;
-    justify-content: center;
-    width: 30vw;
+    gap: 0;
+    width: 100%;
     height: auto;
+    padding: 0;
+    justify-content: stretch;
 }
 
 #CriarUserBody #UserUl #UserForm #divH1 {
     display: flex;
     flex-direction: column;
-    height: auto;
-    justify-content: flex-start;
     align-items: flex-end;
-    width: 12vw;
-    padding-right: 12px;
+    width: 120px;
+    flex-shrink: 0;
+    padding-right: 14px;
+    gap: 0;
 }
 
 #CriarUserBody #UserUl #UserForm #divH1 h1 {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
     height: 36px;
     margin-bottom: 14px;
-    width: 100%;
-    font-size: 16px;
     line-height: 36px;
-    padding: 0;
     text-align: right;
+    padding: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
 }
 
-/* Thumbnail h1 tem altura maior pois tem preview */
 #CriarUserBody #UserUl #UserForm #divH1 h1.thumb-label {
     height: auto;
     min-height: 36px;
@@ -71,33 +81,27 @@
 #CriarUserBody #UserUl #UserForm #divInput {
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    height: auto;
-    width: 16vw;
+    flex: 1;
+    min-width: 0;
 }
 
 #CriarUserBody #UserUl #UserForm #divInput #input,
-#CriarUserBody #UserUl #UserForm #divInput input[type="text"] {
-    font-size: 14px;
-    margin-bottom: 14px;
-    padding: 7px 10px;
-    width: 100%;
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0.16);
-    height: 36px;
-    box-sizing: border-box;
-}
-
+#CriarUserBody #UserUl #UserForm #divInput input[type="text"],
 #CriarUserBody #UserUl #UserForm #divInput select {
     font-size: 14px;
     margin-bottom: 14px;
     padding: 7px 10px;
     width: 100%;
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0.16);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
     height: 36px;
     box-sizing: border-box;
+}
+
+#CriarUserBody #UserUl #UserForm #divInput select option {
+    background: var(--surface);
 }
 
 #thumbnail-upload {
@@ -111,28 +115,36 @@
 #thumbnail-preview {
     max-width: 200px;
     max-height: 120px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     object-fit: cover;
-    border: 1px solid #C4C4C4;
+    border: 1px solid var(--border-strong);
 }
 
 #editor-section {
-    width: 30vw;
-    margin: 8px 0 4px 0;
+    width: 100%;
+    margin: 4px 0;
 }
 
 #editor-section h3 {
-    font-size: 15px;
-    margin: 0 0 6px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 0 0 6px;
 }
 
-#CriarUserBody #UserUl button {
-    margin: 8px 0 4px 0;
-    border-radius: 8px;
-    width: 120px;
+#CriarUserBody #UserUl button[type="submit"],
+#CriarUserBody #UserUl > button:not([type]) {
+    margin: 12px auto 0;
+    border-radius: var(--radius-sm);
+    width: 140px;
     height: 36px;
-    background-color: #C4C4C4;
-    font-size: 15px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     border: none;
+    transition: background 0.15s;
 }
+#CriarUserBody #UserUl button[type="submit"]:hover,
+#CriarUserBody #UserUl > button:not([type]):hover { background: var(--primary-hover); }

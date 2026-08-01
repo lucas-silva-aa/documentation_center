@@ -1,43 +1,43 @@
+/* ── Layout ──────────────────────────────────────────── */
 #CriarCardBody {
-    width: 60vw;
+    width: min(92vw, 860px);
     min-height: 70vh;
-    height: auto;
-    padding: 5vh 0;
-    margin: 0 20vw;
+    padding: 28px 0 40px;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch;
 }
 
 #CriarCardBody #TitleBar {
-    border-radius: 8px 8px 0 0;
-    width: 55vw;
-    height: auto;
-    background-color: #C4C4C4;
-    font-size: 20px;
-    padding: 10px 0 10px 20px;
-    margin: 0;
+    border-radius: var(--radius) var(--radius) 0 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 13px 20px;
+    color: var(--text);
 }
 
 #CriarCardBody #CardUl {
-    width: 55vw;
-    height: auto;
-    margin: 0;
-    padding: 16px;
-    border-radius: 0 0 8px 8px;
-    border: 3px solid #C4C4C4;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 var(--radius) var(--radius);
+    padding: 20px;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     box-sizing: border-box;
 }
 
+/* ── Form ─────────────────────────────────────────────── */
 #CriarCardBody #CardUl #CardForm {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     width: 100%;
-    padding: 8px 0;
 }
 
 #CriarCardBody #CardUl #CardForm .form-row {
@@ -49,10 +49,11 @@
 }
 
 #CriarCardBody #CardUl #CardForm .form-row .form-label {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 500;
-    min-width: 110px;
-    padding-top: 8px;
+    color: var(--text-muted);
+    min-width: 100px;
+    padding-top: 9px;
     text-align: right;
     flex-shrink: 0;
 }
@@ -62,14 +63,16 @@
     flex: 1;
     font-size: 14px;
     padding: 7px 10px;
-    border-radius: 6px;
-    border: 2px solid rgba(0, 0, 0, 0.18);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
     height: 36px;
     box-sizing: border-box;
 }
 
-#CriarCardBody #CardUl #CardForm .form-row select {
-    height: 36px;
+#CriarCardBody #CardUl #CardForm .form-row select option {
+    background: var(--surface);
 }
 
 /* Thumbnail */
@@ -83,57 +86,57 @@
 #thumbnail-preview {
     max-width: 200px;
     max-height: 120px;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     object-fit: cover;
-    border: 1px solid #C4C4C4;
+    border: 1px solid var(--border-strong);
     margin-top: 4px;
 }
 
-/* Editor section */
+/* Editor */
 #editor-section {
     width: 100%;
-    margin: 12px 0 4px 0;
+    margin: 4px 0;
 }
 
 #editor-section h3 {
-    font-size: 15px;
-    margin: 0 0 6px 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin: 0 0 6px;
 }
 
-/* IA sections */
+/* ── IA sections ─────────────────────────────────────── */
 #ia-section {
     width: 100%;
     padding: 14px 16px;
-    margin: 8px 0;
-    background: #f0f4ff;
-    border-radius: 8px;
-    border: 1px solid #c5cae9;
+    background: rgba(57, 73, 171, 0.1);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(99, 102, 241, 0.25);
     box-sizing: border-box;
 }
 
 #ia-section h3 {
-    font-size: 15px;
-    margin: 0 0 8px 0;
-    color: #3949ab;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: #a5b4fc;
 }
 
 #btn-ia {
     background: #3949ab;
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 6px 14px;
     cursor: pointer;
     font-size: 13px;
-    margin: 0 0 10px 0;
+    margin: 0 0 10px;
     width: auto;
     height: auto;
+    transition: background 0.15s;
 }
-
-#btn-ia:disabled {
-    background: #9fa8da;
-    cursor: not-allowed;
-}
+#btn-ia:hover { background: #4a5bc4; }
+#btn-ia:disabled { background: #4a5070; cursor: not-allowed; }
 
 #ia-resumo {
     display: flex;
@@ -142,63 +145,55 @@
 }
 
 #ia-resumo label {
-    font-size: 13px;
-    color: #555;
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
 #textarea-resumo {
     width: 100%;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #c5cae9;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
     font-size: 13px;
     resize: vertical;
     box-sizing: border-box;
 }
 
 #btn-descartar {
-    background: #ffebee;
-    color: #c62828;
-    border: 1px solid #ef9a9a;
+    background: rgba(174, 70, 70, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(174, 70, 70, 0.3);
     width: auto;
     height: auto;
     margin: 0;
     padding: 4px 10px;
     font-size: 12px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
 }
 
-#ia-tags {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
+#ia-tags { display: flex; flex-direction: column; gap: 8px; }
 
 #categoria-box {
     display: flex;
     align-items: center;
     gap: 8px;
 }
-
-#categoria-box label {
-    font-size: 13px;
-    color: #555;
-    white-space: nowrap;
-}
+#categoria-box label { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
 
 #input-categoria {
     padding: 5px 8px;
-    border-radius: 6px;
-    border: 1px solid #c5cae9;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
     font-size: 13px;
     width: 180px;
 }
 
-#tags-chips label {
-    font-size: 13px;
-    color: #555;
-}
+#tags-chips label { font-size: 12px; color: var(--text-muted); }
 
 #chips-container {
     display: flex;
@@ -208,34 +203,34 @@
 }
 
 .tag-chip {
-    background: #e8eaf6;
-    border: 1px solid #9fa8da;
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
     border-radius: 16px;
     padding: 3px 10px;
     font-size: 12px;
     cursor: pointer;
-    color: #283593;
+    color: #a5b4fc;
     user-select: none;
+    transition: background 0.15s;
 }
-
 .tag-chip:hover {
-    background: #ffcdd2;
-    border-color: #ef9a9a;
-    color: #c62828;
+    background: rgba(174, 70, 70, 0.15);
+    border-color: rgba(174, 70, 70, 0.3);
+    color: #fca5a5;
 }
 
-/* Submit button */
+/* ── Submit ───────────────────────────────────────────── */
 #CriarCardBody #CardUl > button[type="submit"] {
-    margin: 16px auto 8px auto;
-    border-radius: 8px;
+    margin: 16px auto 4px;
+    border-radius: var(--radius-sm);
     width: 150px;
-    height: 40px;
-    background-color: #C4C4C4;
-    font-size: 16px;
+    height: 38px;
+    background: var(--primary);
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
     border: none;
+    transition: background 0.15s;
 }
-
-#CriarCardBody #CardUl > button[type="submit"]:hover {
-    background-color: #aaa;
-}
+#CriarCardBody #CardUl > button[type="submit"]:hover { background: var(--primary-hover); }

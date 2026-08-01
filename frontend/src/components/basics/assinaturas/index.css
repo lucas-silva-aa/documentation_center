@@ -1,12 +1,19 @@
 #assinaturas-body {
-    padding: 24px;
-    max-width: 700px;
-    margin: 0 auto;
+    width: min(92vw, 700px);
+    margin: 28px auto;
+    padding-bottom: 40px;
+}
+
+#assinaturas-body h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 20px;
 }
 
 #assinar-form {
     display: flex;
-    gap: 24px;
+    gap: 16px;
     margin-bottom: 28px;
     flex-wrap: wrap;
 }
@@ -15,41 +22,53 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    background: #f5f5f5;
+    background: var(--surface);
+    border: 1px solid var(--border);
     padding: 16px;
-    border-radius: 8px;
+    border-radius: var(--radius);
     flex: 1;
-    min-width: 200px;
+    min-width: 220px;
+}
+
+.assinar-bloco h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted);
 }
 
 #select-assinar {
     padding: 6px 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    background: #fff;
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    background: var(--surface-hover);
+    color: var(--text);
     cursor: pointer;
+    width: 100%;
 }
 
-#btn-assinar:disabled {
-    background: #90caf9;
-    cursor: not-allowed;
-}
+#select-assinar option { background: var(--surface); }
 
 #btn-assinar {
-    background: #1976d2;
+    background: var(--primary);
     color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: var(--radius-sm);
     padding: 7px 14px;
     cursor: pointer;
     font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
 }
+#btn-assinar:hover:not(:disabled) { background: var(--primary-hover); }
+#btn-assinar:disabled { background: rgba(174, 70, 70, 0.35); cursor: not-allowed; }
 
 #assinatura-lista {
     list-style: none;
     padding: 0;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .assinatura-item {
@@ -57,44 +76,58 @@
     justify-content: space-between;
     align-items: center;
     padding: 14px 16px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    background: #fff;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    gap: 12px;
 }
 
 #assin-info {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    flex: 1;
+    min-width: 0;
+}
+
+#assin-info span {
+    font-size: 14px;
+    color: var(--text);
+    word-break: break-word;
 }
 
 #assin-data {
-    font-size: 12px;
-    color: #aaa;
+    font-size: 11px;
+    color: var(--text-subtle);
 }
 
 .btn-cancelar {
-    background: #ffebee;
-    border: 1px solid #ef9a9a;
-    border-radius: 6px;
-    padding: 4px 12px;
+    background: rgba(174, 70, 70, 0.12);
+    border: 1px solid rgba(174, 70, 70, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 5px 12px;
     cursor: pointer;
-    color: #c62828;
+    color: #fca5a5;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+.btn-cancelar:hover { background: rgba(174, 70, 70, 0.25); }
+
+#msg-feedback {
+    background: rgba(74, 222, 128, 0.1);
+    border: 1px solid rgba(74, 222, 128, 0.3);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: #86efac;
+    margin-bottom: 16px;
     font-size: 13px;
 }
 
-#msg-feedback {
-    background: #e8f5e9;
-    border: 1px solid #a5d6a7;
-    border-radius: 6px;
-    padding: 8px 14px;
-    color: #2e7d32;
-    margin-bottom: 16px;
-}
-
 #sem-assinatura, #sem-login {
-    color: #888;
+    color: var(--text-subtle);
     text-align: center;
-    margin-top: 40px;
+    margin-top: 48px;
+    font-size: 14px;
 }

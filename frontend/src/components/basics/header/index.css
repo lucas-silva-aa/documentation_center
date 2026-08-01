@@ -1,81 +1,59 @@
-header{
-    border:0;
-    padding: 0;
-    width:100vmax;
+header {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
-
-
-header #container-header{
-    border: 0;
-    box-sizing: border-box;
-     margin: 0;
-     padding-left: 7.5vw;
-   background: #C4C4C4;
+header #container-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
     display: flex;
     flex-direction: row;
-    max-width: 100%;
-
-    
+    align-items: center;
+    padding: 0 20px;
+    gap: 2px;
+    min-height: 52px;
+    flex-wrap: wrap;
 }
 
-header #container-header button{
-    
-    border-radius: 4px;
-    border: 0;
-    background-color: #AE4646;
-    font-size: 1.8vh;
-    color: #ffffff;
-    width: 6vw;
-    height: 5vw;
-    margin: 2vh 2vw;
+header #container-header button {
+    border-radius: var(--radius-sm);
+    border: none;
+    background: transparent;
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 6px 12px;
+    height: 34px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    width: auto;
 }
 
-
-header #container-header #logado{
-    
-   margin-left: 100px;
-   margin-bottom: 40px;
-   width: 6vw;
-   height: 40px;
-   
-   color: #ffffff;
+header #container-header button:hover {
+    background: var(--primary-dim);
+    color: var(--text);
 }
-
-header #container-header #logado h1{
-
-    width: 6.5vw;
-    height: 40px;
-    font-size: 20px;
-    color: black;
-    text-align: center;
- }
-
- header #container-header #logado input{
-
-    margin-bottom: 40px;
-    width: 6vw;
-    height: 1.5vw;
-    border-radius: 8px;
-    font-size: 20px;
-    color: black;
- }
 
 #btn-notif {
     position: relative;
+    font-size: 17px;
+    padding: 6px 10px;
 }
 
 #notif-badge {
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 4px;
+    right: 4px;
     background: #e53935;
     color: #fff;
     border-radius: 50%;
-    font-size: 10px;
-    font-weight: bold;
-    min-width: 16px;
-    height: 16px;
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,20 +64,54 @@ header #container-header #logado h1{
 
 #notif-toast {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
+    bottom: 24px;
+    right: 24px;
     background: #323232;
     color: #fff;
-    padding: 12px 20px;
-    border-radius: 8px;
+    padding: 12px 18px;
+    border-radius: var(--radius);
     font-size: 14px;
     cursor: pointer;
     z-index: 9999;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    animation: slide-in 0.3s ease;
+    box-shadow: var(--shadow);
+    animation: slide-in 0.25s ease;
+    border-left: 3px solid var(--primary);
 }
 
 @keyframes slide-in {
-    from { transform: translateY(20px); opacity: 0; }
+    from { transform: translateY(16px); opacity: 0; }
     to   { transform: translateY(0);    opacity: 1; }
+}
+
+header #container-header #logado {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+    width: auto;
+    height: auto;
+    margin-bottom: 0;
+}
+
+header #container-header #logado h1 {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-subtle);
+    white-space: nowrap;
+    width: auto;
+    height: auto;
+}
+
+header #container-header #logado input {
+    background: var(--surface-hover);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    font-size: 13px;
+    padding: 4px 8px;
+    width: 120px;
+    height: 28px;
+    margin-bottom: 0;
+    pointer-events: none;
 }
