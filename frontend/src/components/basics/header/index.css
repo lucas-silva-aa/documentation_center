@@ -52,7 +52,7 @@ header #container-header #logado h1{
  }
 
  header #container-header #logado input{
-    
+
     margin-bottom: 40px;
     width: 6vw;
     height: 1.5vw;
@@ -60,3 +60,46 @@ header #container-header #logado h1{
     font-size: 20px;
     color: black;
  }
+
+#btn-notif {
+    position: relative;
+}
+
+#notif-badge {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: #e53935;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 10px;
+    font-weight: bold;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+    pointer-events: none;
+}
+
+#notif-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    background: #323232;
+    color: #fff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    animation: slide-in 0.3s ease;
+}
+
+@keyframes slide-in {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}

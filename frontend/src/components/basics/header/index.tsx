@@ -1,7 +1,7 @@
 import './index.css'
 import {Link} from 'react-router-dom'
 import Alert from 'react-popup-alert'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import Popup from 'reactjs-popup'
 import { useHistory } from 'react-router-dom';
@@ -17,6 +17,9 @@ const Header = () => {
   const [codigo, setCodigo] = useState("");
   const [senha, setSenha] = useState("");
   const [logado, setLogado] = useState("");
+  const [naoLidas, setNaoLidas] = useState(0);
+  const [toast, setToast] = useState("");
+  const prevNaoLidas = useRef(0);
 
 
   const login = async () => {
@@ -32,12 +35,32 @@ const Header = () => {
 }
 
 useEffect(() => {
-    if(localStorage.getItem("login")?.toString === null){        
+    if(localStorage.getItem("login")?.toString === null){
     }else{
         setLogado(localStorage.getItem("login") || '' )
     }
-
 }, [])
+
+useEffect(() => {
+    const checar = async () => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+        try {
+            const res = await api.get(`/v1/ts/notificacoes/usuario/${userId}/nao-lidas`);
+            const count: number = res.data.naoLidas ?? 0;
+            if (count > prevNaoLidas.current) {
+                setToast(`Você tem ${count} notificaç${count === 1 ? 'ão' : 'ões'} não lida${count === 1 ? '' : 's'}`);
+                setTimeout(() => setToast(""), 4000);
+            }
+            prevNaoLidas.current = count;
+            setNaoLidas(count);
+        } catch {}
+    };
+
+    checar();
+    const interval = setInterval(checar, 10000);
+    return () => clearInterval(interval);
+}, [logado])
 
   useEffect(() => {
     if (post) {
@@ -143,6 +166,11 @@ const permissionCard = async () => {
                     "padding-left": "10px"
                 }}
                 />
+        {toast && (
+            <div id='notif-toast' onClick={() => history.push('/notificacoes')}>
+                🔔 {toast}
+            </div>
+        )}
          <header className="header mt-auto py-3 ">
      
   <div className="container" id="container-header">
@@ -155,7 +183,10 @@ const permissionCard = async () => {
     
     <button onClick={permissionCard}>Manage Cards</button>
 
-    <button onClick={() => history.push('/notificacoes')}>🔔 Notificações</button>
+    <button onClick={() => history.push('/notificacoes')} id='btn-notif'>
+        🔔
+        {naoLidas > 0 && <span id='notif-badge'>{naoLidas > 99 ? '99+' : naoLidas}</span>}
+    </button>
 
     <button onClick={() => history.push('/assinaturas')}>📌 Assinaturas</button>
 
