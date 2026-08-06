@@ -1,9 +1,7 @@
 import './index.css'
-import {Link} from 'react-router-dom'
 import Alert from 'react-popup-alert'
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
-import Popup from 'reactjs-popup'
 import { useHistory } from 'react-router-dom';
 import api from 'services/api'
 
@@ -12,27 +10,10 @@ const Header = () => {
     const history = useHistory();
   const [post, setPost] = useState(false);
   const [descricao, setDescricao] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
-  const [nome, setNome] = useState("");
-  const [codigo, setCodigo] = useState("");
-  const [senha, setSenha] = useState("");
   const [logado, setLogado] = useState("");
   const [naoLidas, setNaoLidas] = useState(0);
   const [toast, setToast] = useState("");
   const prevNaoLidas = useRef(0);
-
-
-  const login = async () => {
-    const response = await api.get('/v1/ts/users/nomes', { params: {  nomes: nome, senhas: senha} });
-    setCodigo(response.data.admin_user)
-    if(response != null){
-        localStorage.setItem("login", nome);
-        localStorage.setItem("admin", response.data.admin_user);
-        localStorage.setItem("userId", response.data.codigo_user);
-        setLogado(nome)
-    }
-
-}
 
 useEffect(() => {
     if(localStorage.getItem("login")?.toString === null){
@@ -190,16 +171,14 @@ const permissionCard = async () => {
 
     <button onClick={() => history.push('/assinaturas')}>📌 Assinaturas</button>
 
-    <Popup trigger={<button >  Change Account</button>} position="center center" open={isOpen}>
-                                            <h4 id='popupText'>Entre com seu perfil: </h4>
-                                            <input id='username' value={nome} onChange={e => { setNome(e.target.value) }}/>
-                                            <input id='password' value={senha} onChange={e => { setSenha(e.target.value) }}/>
-                                            <button id='login' onClick={login}>Login</button>
-                                        </Popup>
-  <h2 id='logado'>
-    <h1>Usuario logado: </h1>
-    <input value={logado}></input>
-  </h2>
+    <button onClick={() => {
+        localStorage.clear();
+        history.push('/login');
+    }} id='btn-sair'>Sair</button>
+  <div id='logado'>
+    <span id='logado-label'>Logado como</span>
+    <span id='logado-nome'>{logado}</span>
+  </div>
   </div>
      </header>
         </>
