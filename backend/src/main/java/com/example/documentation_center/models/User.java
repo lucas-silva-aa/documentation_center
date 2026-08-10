@@ -74,7 +74,7 @@ public class User implements Serializable, UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return this.permissions;
+        return this.permissions != null ? this.permissions : new ArrayList<>();
     }
 
     @Override
@@ -110,9 +110,11 @@ public class User implements Serializable, UserDetails {
     //ends user details methods
 
 
+    @Transient
     private List<Permissions> permissions;
 
     public List<String> getRoles() {
+        if (this.permissions == null) return new ArrayList<>();
         List<String> roles = new ArrayList<>();
         for (Permissions permission : this.permissions) {
             roles.add(permission.getDescription());
