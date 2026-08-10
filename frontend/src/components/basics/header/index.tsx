@@ -152,35 +152,28 @@ const permissionCard = async () => {
                 🔔 {toast}
             </div>
         )}
-         <header className="header mt-auto py-3 ">
-     
+         <header>
+  <h1 id="header-title-bar">Documentation Center</h1>
   <div className="container" id="container-header">
-
-    <button onClick={permissionBranch} >Manage Branchs</button>
-
+    <button onClick={permissionBranch}>Manage Branchs</button>
     <button onClick={permissionFolder}>Manage Folders</button>
-
     <button onClick={permissionUser}>Manage Users</button>
-    
     <button onClick={permissionCard}>Manage Cards</button>
-
     <button onClick={() => history.push('/notificacoes')} id='btn-notif'>
         🔔
         {naoLidas > 0 && <span id='notif-badge'>{naoLidas > 99 ? '99+' : naoLidas}</span>}
     </button>
-
     <button onClick={() => history.push('/assinaturas')}>📌 Assinaturas</button>
-
+    <div id='logado'>
+      <span id='logado-label'>Logado como</span>
+      <span id='logado-nome'>{logado}</span>
+    </div>
     <button onClick={() => {
         localStorage.clear();
         history.push('/login');
     }} id='btn-sair'>Sair</button>
-  <div id='logado'>
-    <span id='logado-label'>Logado como</span>
-    <span id='logado-nome'>{logado}</span>
   </div>
-  </div>
-     </header>
+</header>
         </>
     );
 }

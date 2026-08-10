@@ -1,14 +1,7 @@
-import './index.css'
+import './index.css';
 
-const Title = () => {
-    return (
-        <>
-         
-     <h1 className="page-title">Documentation Center</h1>
-  
-
-        </>
-    );
-}
+const Title = () => (
+    <div className="page-title"></div>
+);
 
 export default Title;

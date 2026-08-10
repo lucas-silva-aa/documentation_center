@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 import api from '../../../services/api';
 import './index.css';
 
@@ -8,7 +7,6 @@ const LoginBody: React.FC = () => {
     const [senha, setSenha] = useState('');
     const [erro, setErro] = useState('');
     const [loading, setLoading] = useState(false);
-    const history = useHistory();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +21,7 @@ const LoginBody: React.FC = () => {
                 localStorage.setItem('login', nome);
                 localStorage.setItem('admin', res.data.admin_user);
                 localStorage.setItem('userId', res.data.codigo_user);
-                history.push('/');
+                window.location.href = '/';
             }
         } catch {
             setErro('Usuário ou senha inválidos.');
