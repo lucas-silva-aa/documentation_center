@@ -59,7 +59,7 @@ const HomeBody: React.FC = () => {
             descricao_folder: inputDescricao,
             idBranch: selectedBranch.codigo_branch,
             idUser: userId,
-        }).then(r => r.data).catch(async error => {
+        }, { params: { requesterId: userId } }).then(r => r.data).catch(async error => {
             if (error.response) {
                 setDescricao(error.response.data?.descricao ?? 'Erro ao atualizar');
                 flag2 = true;

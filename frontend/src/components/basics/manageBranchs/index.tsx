@@ -44,7 +44,9 @@ const BranchBody: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [descricao2, setDescricao2] = useState("");
     const [alertState, setAlertState] = React.useState({ show: false, text: '' });
-    const isAdmin = localStorage.getItem('admin') === 'true';
+    const nivel = parseInt(localStorage.getItem('nivelAcesso') || '1');
+    const isAdmin = nivel >= 3;
+    const myUserId = parseInt(localStorage.getItem('userId') || '0');
     const history = useHistory();
 
     useEffect(() => {
@@ -62,7 +64,7 @@ const BranchBody: React.FC = () => {
     }, [page]);
 
     const deleteMsg = async (codigo: string) => {
-        await api.delete('/v1/ts/branchs/' + codigo);
+        await api.delete('/v1/ts/branchs/' + codigo, { params: { requesterId: myUserId } });
         window.location.reload();
     }
 

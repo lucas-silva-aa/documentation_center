@@ -11,20 +11,32 @@ import com.example.documentation_center.services.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Optional;
 
 @Service
 public class BranchServices {
-    //private BranchDAO branchDAO;
-    //private UserDAO userDAO;
-
     @Autowired
     BranchDAO branchDAO;
 
-    public BranchDTO create(BranchDTO branchDTO) {
+    @Autowired
+    UserDAO userDAO;
+
+    private void verificarAdmin(Long requesterId) {
+        if (requesterId == null) return;
+        User req = userDAO.findById(requesterId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Requisitante não encontrado"));
+        if (!req.isAdmin3()) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Apenas administradores podem gerenciar branches");
+        }
+    }
+
+    public BranchDTO create(BranchDTO branchDTO, Long requesterId) {
+        verificarAdmin(requesterId);
         var entity = DozerConverter.parseObject(branchDTO, Branch.class);
         return DozerConverter.parseObject(branchDAO.save(entity), BranchDTO.class);
     }
@@ -58,11 +70,11 @@ public class BranchServices {
         return DozerConverter.parseObject(entity, BranchDTO.class);
     }
 
-    public BranchDTO update(BranchDTO branch) {
+    public BranchDTO update(BranchDTO branch, Long requesterId) {
+        verificarAdmin(requesterId);
         var entity = branchDAO.findById(branch.getKey())
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 
-       // entity.setId(branch.getKey());
         entity.setNome(branch.getNome());
         entity.setDescricao(branch.getDescricao());
         entity.setDataHora(branch.getDataHora());
@@ -79,7 +91,8 @@ public class BranchServices {
         return DozerConverter.parseObject(entity, AddressVO.class);
     }*/
 
-    public void delete(Long id) {
+    public void delete(Long id, Long requesterId) {
+        verificarAdmin(requesterId);
         Branch entity = branchDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
         branchDAO.delete(entity);

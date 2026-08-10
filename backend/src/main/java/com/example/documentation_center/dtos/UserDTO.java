@@ -30,6 +30,10 @@ public class UserDTO extends RepresentationModel<UserDTO> implements Serializabl
     private String senha;
     @JsonProperty("admin_user")
     private Boolean admin;
+    @JsonProperty("nivel_acesso")
+    private Integer nivelAcesso;
+    @JsonProperty("id_branch")
+    private Long idBranch;
     @JsonProperty("data_user")
     private LocalDate dataHora;
 
@@ -52,6 +56,22 @@ public class UserDTO extends RepresentationModel<UserDTO> implements Serializabl
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public Integer getNivelAcesso() {
+        return nivelAcesso;
+    }
+
+    public void setNivelAcesso(Integer nivelAcesso) {
+        this.nivelAcesso = nivelAcesso;
+    }
+
+    public Long getIdBranch() {
+        return idBranch;
+    }
+
+    public void setIdBranch(Long idBranch) {
+        this.idBranch = idBranch;
     }
 
     public String getSenha() {

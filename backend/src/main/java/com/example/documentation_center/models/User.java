@@ -43,6 +43,9 @@ public class User implements Serializable, UserDetails {
     @Column(name = "admin")
     private boolean admin;
 
+    @Column(name = "nivel_acesso")
+    private Integer nivelAcesso;
+
     @Column(name = "data", nullable = false)
     private LocalDate dataHora;
 
@@ -209,6 +212,26 @@ public class User implements Serializable, UserDetails {
 
     public void setIdBranch(Long idBranch) {
         this.idBranch = idBranch;
+    }
+
+    public Integer getNivelAcesso() {
+        return nivelAcesso;
+    }
+
+    public void setNivelAcesso(Integer nivelAcesso) {
+        this.nivelAcesso = nivelAcesso;
+    }
+
+    public int getNivelAcessoValor() {
+        return nivelAcesso != null ? nivelAcesso : NivelAcesso.COLABORADOR.getValor();
+    }
+
+    public boolean isAdmin3() {
+        return getNivelAcessoValor() >= NivelAcesso.ADMIN.getValor();
+    }
+
+    public boolean isGestor() {
+        return getNivelAcessoValor() >= NivelAcesso.GESTOR.getValor();
     }
 
 

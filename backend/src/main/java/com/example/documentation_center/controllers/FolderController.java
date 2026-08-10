@@ -92,8 +92,9 @@ public class FolderController {
     @Operation(summary = "Create a new folder")
     @PostMapping(produces = { "application/json", "application/xml", "application/x-yaml" },
             consumes = { "application/json", "application/xml", "application/x-yaml" })
-    public FolderDTO create(@RequestBody FolderDTO folder) {
-        FolderDTO folderDTO = service.create(folder);
+    public FolderDTO create(@RequestBody FolderDTO folder,
+                            @RequestParam(required = false) Long requesterId) {
+        FolderDTO folderDTO = service.create(folder, requesterId);
         folderDTO.add(linkTo(methodOn(FolderController.class).findById(folderDTO.getKey())).withSelfRel());
         return folderDTO;
     }
@@ -101,9 +102,10 @@ public class FolderController {
     @Operation(summary = "Update a specific folder")
     @PutMapping(value = "/{id}", produces = { "application/json", "application/xml", "application/x-yaml" },
             consumes = { "application/json", "application/xml", "application/x-yaml" })
-    public FolderDTO update(@PathVariable Long id, @RequestBody FolderDTO folder) {
+    public FolderDTO update(@PathVariable Long id, @RequestBody FolderDTO folder,
+                            @RequestParam(required = false) Long requesterId) {
         folder.setKey(id);
-        FolderDTO folderDTO = service.update(folder);
+        FolderDTO folderDTO = service.update(folder, requesterId);
         folderDTO.add(linkTo(methodOn(FolderController.class).findById(folderDTO.getKey())).withSelfRel());
         return folderDTO;
     }
@@ -119,8 +121,9 @@ public class FolderController {
 
     @Operation(summary = "Delete a specific folder by your ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable("id") Long id,
+                                    @RequestParam(required = false) Long requesterId) {
+        service.delete(id, requesterId);
         return ResponseEntity.ok().build();
     }
 

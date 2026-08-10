@@ -75,12 +75,13 @@ const HomeBody: React.FC = () => {
             return;
         }
         let flag2 = false;
+        const requesterId = localStorage.getItem('userId');
         await api.put('/v1/ts/cards/' + inputCodigo, {
             nome_card: inputNome,
             descricao_card: inputDescricao,
             ...(thumbnailUrl ? { thumbnail_card: thumbnailUrl } : {}),
             ...(selectedFolder ? { folderDTO: { codigo_folder: selectedFolder.codigo_folder } } : {}),
-        }).then(response => response.data)
+        }, { params: { requesterId } }).then(response => response.data)
             .catch(async error => {
                 if (error.response) {
                     await setDescricao(error.response.data?.descricao ?? 'Erro ao atualizar');

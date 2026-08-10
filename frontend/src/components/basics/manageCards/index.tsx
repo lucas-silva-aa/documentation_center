@@ -41,6 +41,7 @@ interface icard {
     resumo_card: string,
     tags_card: string,
     categoria_card: string,
+    idUser: number,
     folderDTO: ifolder,
     _links_card: i_links
 }
@@ -79,7 +80,9 @@ const CardBody: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const alertMsg = useRef('');
     const [alertState, setAlertState] = useState({ show: false, text: '' });
-    const isAdmin = localStorage.getItem('admin') === 'true';
+    const nivel = parseInt(localStorage.getItem('nivelAcesso') || '1');
+    const isGestor = nivel >= 2;
+    const myUserId = parseInt(localStorage.getItem('userId') || '0');
     const history = useHistory();
 
     const PAGE_SIZE = 4;
@@ -111,19 +114,18 @@ const CardBody: React.FC = () => {
         setAlertState({ show: true, text: msg });
     };
 
-    const deleteMsg = async (id: string) => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
-        await api.delete('/v1/ts/cards/' + id);
+    const deleteMsg = async (id: string, cardUserId: number) => {
+        if (!isGestor && cardUserId !== myUserId) { showAlert('Você não tem permissão'); return; }
+        await api.delete('/v1/ts/cards/' + id, { params: { requesterId: myUserId } });
         window.location.reload();
     };
 
-    const updateMsg = (id: number) => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
+    const updateMsg = (id: number, cardUserId: number) => {
+        if (!isGestor && cardUserId !== myUserId) { showAlert('Você não tem permissão'); return; }
         history.push('/updatecard', { id });
     };
 
     const criarNovo = () => {
-        if (!isAdmin) { showAlert('Você não tem permissão'); return; }
         history.push('/newcard');
     };
 
@@ -178,7 +180,7 @@ const CardBody: React.FC = () => {
             />
             <div id='CardBody'>
                 <div id='sidebar'>
-                    {isAdmin && <button id='newObj' onClick={criarNovo}>Criar novo</button>}
+                    <button id='newObj' onClick={criarNovo}>Criar novo</button>
 
                     <div id='searchBar'>
                         <FiSearch id='searchIcon' />
@@ -213,11 +215,11 @@ const CardBody: React.FC = () => {
                                 {m.resumo_card && <h4>{m.resumo_card}</h4>}
                             </div>
                             <div className='icons-buttons'>
-                                {isAdmin && <FiEdit className='edit-btn' onClick={() => updateMsg(m.codigo_card)} />}
-                                {isAdmin && (
+                                {(isGestor || m.idUser === myUserId) && <FiEdit className='edit-btn' onClick={() => updateMsg(m.codigo_card, m.idUser)} />}
+                                {(isGestor || m.idUser === myUserId) && (
                                     <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
-                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_card.toString())}>Sim</button>
+                                        <button className='conf-delete' onClick={() => deleteMsg(m.codigo_card.toString(), m.idUser)}>Sim</button>
                                         <button className='conf-delete' onClick={() => setIsOpen(!isOpen)}>Nao</button>
                                     </Popup>
                                 )}

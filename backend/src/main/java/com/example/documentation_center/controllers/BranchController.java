@@ -92,8 +92,9 @@ public class BranchController {
     @Operation(summary = "Create a new branch")
     @PostMapping(produces = {"application/json", "application/xml", "application/x-yaml"},
             consumes = {"application/json", "application/xml", "application/x-yaml"})
-    public BranchDTO create(@RequestBody BranchDTO branch) {
-        BranchDTO branchDTO = service.create(branch);
+    public BranchDTO create(@RequestBody BranchDTO branch,
+                            @RequestParam(required = false) Long requesterId) {
+        BranchDTO branchDTO = service.create(branch, requesterId);
         branchDTO.add(linkTo(methodOn(BranchController.class).findById(branchDTO.getKey())).withSelfRel());
         return branchDTO;
     }
@@ -101,9 +102,10 @@ public class BranchController {
     @Operation(summary = "Update a specific branch")
     @PutMapping(value = "/{id}", produces = {"application/json", "application/xml", "application/x-yaml"},
             consumes = {"application/json", "application/xml", "application/x-yaml"})
-    public BranchDTO update(@PathVariable Long id, @RequestBody BranchDTO branch) {
+    public BranchDTO update(@PathVariable Long id, @RequestBody BranchDTO branch,
+                            @RequestParam(required = false) Long requesterId) {
         branch.setKey(id);
-        BranchDTO branchDTO = service.update(branch);
+        BranchDTO branchDTO = service.update(branch, requesterId);
         branchDTO.add(linkTo(methodOn(BranchController.class).findById(branchDTO.getKey())).withSelfRel());
         return branchDTO;
     }
@@ -119,8 +121,9 @@ public class BranchController {
 
     @Operation(summary = "Delete a specific branch by your ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable("id") Long id,
+                                    @RequestParam(required = false) Long requesterId) {
+        service.delete(id, requesterId);
         return ResponseEntity.ok().build();
     }
 

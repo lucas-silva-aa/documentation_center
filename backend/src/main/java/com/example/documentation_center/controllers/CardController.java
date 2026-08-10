@@ -76,8 +76,9 @@ public class CardController {
     @Operation(summary = "Update a specific card")
     @PutMapping(value = "/{id}", produces = { "application/json", "application/xml", "application/x-yaml" },
             consumes = { "application/json", "application/xml", "application/x-yaml" })
-    public CardDTO update(@PathVariable Long id, @RequestBody CardDTO card) {
-        CardDTO cardDTO = service.update(id, card);
+    public CardDTO update(@PathVariable Long id, @RequestBody CardDTO card,
+                          @RequestParam(required = false) Long requesterId) {
+        CardDTO cardDTO = service.update(id, card, requesterId);
         cardDTO.add(linkTo(methodOn(CardController.class).findById(cardDTO.getKey())).withSelfRel());
         return cardDTO;
     }
@@ -109,8 +110,9 @@ public class CardController {
 
     @Operation(summary = "Delete a specific card by your ID")
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-        service.delete(id);
+    public ResponseEntity<?> delete(@PathVariable("id") Long id,
+                                    @RequestParam(required = false) Long requesterId) {
+        service.delete(id, requesterId);
         return ResponseEntity.ok().build();
     }
 

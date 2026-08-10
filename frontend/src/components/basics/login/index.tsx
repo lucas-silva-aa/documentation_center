@@ -21,6 +21,8 @@ const LoginBody: React.FC = () => {
                 localStorage.setItem('login', nome);
                 localStorage.setItem('admin', res.data.admin_user);
                 localStorage.setItem('userId', res.data.codigo_user);
+                localStorage.setItem('nivelAcesso', res.data.nivel_acesso ?? '1');
+                localStorage.setItem('idBranch', res.data.id_branch ?? '');
                 window.location.href = '/';
             }
         } catch {

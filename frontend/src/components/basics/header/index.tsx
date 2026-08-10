@@ -69,8 +69,10 @@ async function onShowAlert(type: string) {
     })
 }
 
+const nivel = parseInt(localStorage.getItem('nivelAcesso') || '1');
+
 const permissionFolder = async () => {
-    if(localStorage.getItem("admin") != 'true'){
+    if(nivel < 2){
         setDescricao("Você não tem permissão")
         setPost(!post)
     }else{
@@ -79,7 +81,7 @@ const permissionFolder = async () => {
 }
 
 const permissionBranch = async () => {
-    if(localStorage.getItem("admin") != 'true'){
+    if(nivel < 3){
         setDescricao("Você não tem permissão")
         setPost(!post)
     }else{
@@ -88,7 +90,7 @@ const permissionBranch = async () => {
 }
 
 const permissionUser = async () => {
-    if(localStorage.getItem("admin") != 'true'){
+    if(nivel < 3){
         setDescricao("Você não tem permissão")
         setPost(!post)
     }else{
@@ -96,14 +98,8 @@ const permissionUser = async () => {
     }
 }
 
-
 const permissionCard = async () => {
-    if(localStorage.getItem("admin") != 'true'){
-        setDescricao("Você não tem permissão")
-        setPost(!post)
-    }else{
-        history.push('/')
-    }
+    history.push('/')
 }
 
     return (

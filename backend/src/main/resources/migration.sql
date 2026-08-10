@@ -3,6 +3,17 @@
 -- Compatível com Oracle (principal) e MySQL (dev)
 -- ============================================================
 
+-- 0. Sistema de permissões por nível (COLABORADOR=1, GESTOR=2, ADMIN=3)
+-- Oracle:
+ALTER TABLE Users ADD nivel_acesso NUMBER(1) DEFAULT 1 NOT NULL;
+UPDATE Users SET nivel_acesso = 3 WHERE admin = 1;
+UPDATE Users SET nivel_acesso = 1 WHERE admin = 0;
+COMMIT;
+-- MySQL:
+-- ALTER TABLE Users ADD COLUMN nivel_acesso TINYINT(1) DEFAULT 1 NOT NULL;
+-- UPDATE Users SET nivel_acesso = 3 WHERE admin = 1;
+-- UPDATE Users SET nivel_acesso = 1 WHERE admin = 0;
+
 -- 1. Novos campos na tabela Cards (documentações)
 -- Oracle:
 ALTER TABLE Cards ADD (resumo VARCHAR2(500), tags VARCHAR2(300), categoria VARCHAR2(100));

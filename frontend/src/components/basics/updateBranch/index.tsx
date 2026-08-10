@@ -31,11 +31,12 @@ const HomeBody: React.FC = () => {
             setPost(p => !p);
             return;
         }
+        const requesterId = localStorage.getItem('userId');
         let flag2 = false;
         await api.put('/v1/ts/branchs/' + inputCodigo, {
             nome_branch: inputNome,
             descricao_branch: inputDescricao,
-        }).then(r => r.data).catch(async error => {
+        }, { params: { requesterId } }).then(r => r.data).catch(async error => {
             if (error.response) {
                 setDescricao(error.response.data?.descricao ?? 'Erro ao atualizar');
                 flag2 = true;

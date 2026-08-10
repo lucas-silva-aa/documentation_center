@@ -85,6 +85,8 @@ public class UserServices implements UserDetailsService {
         entity.setDescricao(user.getDescricao());
         entity.setAdmin(user.getAdmin());
         entity.setDataHora(user.getDataHora());
+        if (user.getNivelAcesso() != null) entity.setNivelAcesso(user.getNivelAcesso());
+        if (user.getIdBranch() != null) entity.setIdBranch(user.getIdBranch());
 
         var vo = DozerConverter.parseObject(userDAO.save(entity), UserDTO.class);
         return vo;

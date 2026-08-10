@@ -4,14 +4,19 @@ import com.example.documentation_center.converter.DozerConverter;
 import com.example.documentation_center.dtos.CardDTO;
 import com.example.documentation_center.exception.ResourceNotFoundException;
 import com.example.documentation_center.models.Card;
+import com.example.documentation_center.models.User;
 import com.example.documentation_center.repositories.CardDAO;
+import com.example.documentation_center.repositories.UserDAO;
 import com.example.documentation_center.services.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import java.time.LocalDate;
+import java.util.Objects;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class CardServices {
@@ -20,7 +25,25 @@ public class CardServices {
     CardDAO cardDAO;
 
     @Autowired
+    UserDAO userDAO;
+
+    @Autowired
     NotificacaoServices notificacaoServices;
+
+    private User buscarRequisitante(Long requesterId) {
+        return userDAO.findById(requesterId)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Requisitante não encontrado"));
+    }
+
+    private void verificarPermissaoCard(Card card, Long requesterId) {
+        if (requesterId == null) return;
+        User req = buscarRequisitante(requesterId);
+        boolean isGestor = req.getNivelAcessoValor() >= 2;
+        boolean isOwner = Objects.equals(card.getIdUser(), requesterId);
+        if (!isGestor && !isOwner) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Sem permissão para modificar este card");
+        }
+    }
 
     @Transactional
     public CardDTO create(CardDTO cardDTO) {
@@ -50,9 +73,10 @@ public class CardServices {
     }
 
     @Transactional
-    public CardDTO update(Long id, CardDTO card) {
+    public CardDTO update(Long id, CardDTO card, Long requesterId) {
         var entity = cardDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+        verificarPermissaoCard(entity, requesterId);
         if (card.getNome() != null) entity.setNome(card.getNome());
         if (card.getDescricao() != null) entity.setDescricao(card.getDescricao());
         if (card.getThumbnail() != null) entity.setThumbnail(card.getThumbnail());
@@ -91,9 +115,10 @@ public class CardServices {
         return result.map(CardDTO::new);
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, Long requesterId) {
         Card entity = cardDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
+        verificarPermissaoCard(entity, requesterId);
         cardDAO.delete(entity);
     }
 }
