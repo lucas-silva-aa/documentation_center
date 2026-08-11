@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Redirect, RouteProps } from 'react-router-dom';
 
-const PrivateAdminRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) => {
+const PrivateGestorRoute: React.FC<RouteProps> = ({ component: Component, ...rest }) => {
     const nivel = parseInt(localStorage.getItem('nivelAcesso') || '1');
     const isLoggedIn = !!localStorage.getItem('login');
 
@@ -10,11 +10,11 @@ const PrivateAdminRoute: React.FC<RouteProps> = ({ component: Component, ...rest
             {...rest}
             render={props => {
                 if (!isLoggedIn) return <Redirect to="/login" />;
-                if (nivel < 3) return <Redirect to="/" />;
+                if (nivel < 2) return <Redirect to="/" />;
                 return Component ? <Component {...props} /> : null;
             }}
         />
     );
 };
 
-export default PrivateAdminRoute;
+export default PrivateGestorRoute;
