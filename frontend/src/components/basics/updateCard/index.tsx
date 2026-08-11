@@ -16,6 +16,8 @@ interface ifolder {
 
 interface LocationState { id?: number; }
 
+const CATEGORIAS = ['', 'API', 'Banco de Dados', 'DevOps', 'Frontend', 'Infraestrutura', 'Segurança'];
+
 const HomeBody: React.FC = () => {
     const [inputCodigo, setInputCodigo] = useState<number | ''>('');
     const [inputNome, setInputNome] = useState('');
@@ -27,6 +29,11 @@ const HomeBody: React.FC = () => {
     const [selectedFolder, setSelectedFolder] = useState<ifolder | null>(null);
     const [post, setPost] = useState(false);
     const [descricao, setDescricao] = useState('');
+    const [inputResumo, setInputResumo] = useState('');
+    const [inputTags, setInputTags] = useState<string[]>([]);
+    const [inputCategoria, setInputCategoria] = useState('');
+    const [loadingResumo, setLoadingResumo] = useState(false);
+    const [loadingTags, setLoadingTags] = useState(false);
     const location = useLocation<LocationState>();
     const history = useHistory();
 
@@ -46,6 +53,13 @@ const HomeBody: React.FC = () => {
                 setInputDescricao(d.descricao_card ?? '');
                 setThumbnailUrl(d.thumbnail_card ?? '');
                 if (d.thumbnail_card) setThumbnailPreview(d.thumbnail_card);
+                setInputResumo(d.resumo_card ?? '');
+                setInputTags(
+                    d.tags_card
+                        ? d.tags_card.split(',').map((t: string) => t.trim()).filter(Boolean)
+                        : []
+                );
+                setInputCategoria(d.categoria_card ?? '');
                 const fid = d.idFolder;
                 const found = list.find(f => f.codigo_folder === fid);
                 if (found) setSelectedFolder(found);
@@ -68,6 +82,38 @@ const HomeBody: React.FC = () => {
         }
     };
 
+    const gerarResumo = async () => {
+        if (!inputNome && !inputDescricao) return;
+        setLoadingResumo(true);
+        try {
+            const response = await api.post('/v1/ts/ia/resumo', { titulo: inputNome, conteudo: inputDescricao });
+            setInputResumo(response.data.resumo || '');
+        } catch {
+            setInputResumo('Não foi possível gerar o resumo.');
+        } finally {
+            setLoadingResumo(false);
+        }
+    };
+
+    const sugerirTags = async () => {
+        if (!inputNome && !inputDescricao) return;
+        setLoadingTags(true);
+        try {
+            const response = await api.post('/v1/ts/ia/sugestoes', { titulo: inputNome, conteudo: inputDescricao });
+            const raw = typeof response.data === 'string' ? response.data : JSON.stringify(response.data);
+            const match = raw.match(/\{[\s\S]*\}/);
+            const json = match ? JSON.parse(match[0]) : null;
+            setInputTags(json?.tags || []);
+            setInputCategoria(json?.categoria || '');
+        } catch {
+            setInputTags([]); setInputCategoria('');
+        } finally {
+            setLoadingTags(false);
+        }
+    };
+
+    const removerTag = (tag: string) => setInputTags(inputTags.filter(t => t !== tag));
+
     const postMsg = async () => {
         if (!inputCodigo) {
             setDescricao('Nenhum card selecionado para editar');
@@ -79,6 +125,9 @@ const HomeBody: React.FC = () => {
         await api.put('/v1/ts/cards/' + inputCodigo, {
             nome_card: inputNome,
             descricao_card: inputDescricao,
+            resumo_card: inputResumo || null,
+            tags_card: inputTags.length > 0 ? inputTags.join(',') : null,
+            categoria_card: inputCategoria || null,
             ...(thumbnailUrl ? { thumbnail_card: thumbnailUrl } : {}),
             ...(selectedFolder ? { folderDTO: { codigo_folder: selectedFolder.codigo_folder } } : {}),
         }, { params: { requesterId } }).then(response => response.data)
@@ -125,9 +174,9 @@ const HomeBody: React.FC = () => {
                     "color": "#000", "padding-left": "10px"
                 }}
             />
-            <div id='CriarUserBody'>
+            <div id='UpdateCardBody'>
                 <h2 id='TitleBar'>Atualizar Card {inputCodigo ? `#${inputCodigo}` : ''}</h2>
-                <ul id='UserUl'>
+                <ul id='UpdateCardUl'>
                     <div id='UserForm'>
                         <div id='divH1'>
                             <h1>Nome*: </h1>
@@ -164,6 +213,63 @@ const HomeBody: React.FC = () => {
                     <div id='editor-section'>
                         <h3>Conteúdo:</h3>
                         <RichTextEditor content={inputDescricao} onChange={setInputDescricao} />
+                    </div>
+
+                    <div id='ia-section'>
+                        <h3>Resumo automático (TL;DR)</h3>
+                        <button type="button" onClick={gerarResumo}
+                            disabled={loadingResumo || (!inputNome && !inputDescricao)} id='btn-ia'>
+                            {loadingResumo ? 'Gerando...' : '✨ Gerar Resumo via IA'}
+                        </button>
+                        {inputResumo !== '' && (
+                            <div id='ia-resumo'>
+                                <label>Resumo (editável antes de salvar):</label>
+                                <textarea
+                                    value={inputResumo}
+                                    onChange={e => setInputResumo(e.target.value)}
+                                    rows={3}
+                                    id='textarea-resumo'
+                                />
+                                <button type="button" id='btn-descartar' onClick={() => setInputResumo('')}>
+                                    Descartar resumo
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div id='ia-section'>
+                        <h3>Tags e Categoria (IA)</h3>
+                        <button type="button" onClick={sugerirTags}
+                            disabled={loadingTags || (!inputNome && !inputDescricao)} id='btn-ia'>
+                            {loadingTags ? 'Analisando...' : '🏷️ Sugerir Tags via IA'}
+                        </button>
+                        {(inputTags.length > 0 || inputCategoria) && (
+                            <div id='ia-tags'>
+                                {inputCategoria && (
+                                    <div id='categoria-box'>
+                                        <label>Categoria: </label>
+                                        <input
+                                            type="text"
+                                            value={inputCategoria}
+                                            onChange={e => setInputCategoria(e.target.value)}
+                                            id='input-categoria'
+                                        />
+                                    </div>
+                                )}
+                                {inputTags.length > 0 && (
+                                    <div id='tags-chips'>
+                                        <label>Tags (clique para remover):</label>
+                                        <div id='chips-container'>
+                                            {inputTags.map(tag => (
+                                                <span key={tag} className='tag-chip' onClick={() => removerTag(tag)} title='Clique para remover'>
+                                                    {tag} ✕
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     <button type="submit" onClick={postMsg}>Atualizar</button>

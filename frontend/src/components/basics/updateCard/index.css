@@ -1,5 +1,5 @@
 /* ── Layout ──────────────────────────────────────────── */
-#CriarUserBody {
+#UpdateCardBody {
     width: min(92vw, 720px);
     min-height: 50vh;
     padding: 28px 0 40px;
@@ -9,7 +9,7 @@
     align-items: stretch;
 }
 
-#CriarUserBody #TitleBar {
+#UpdateCardBody #TitleBar {
     border-radius: var(--radius) var(--radius) 0 0;
     background: var(--surface);
     border: 1px solid var(--border);
@@ -22,7 +22,7 @@
     margin: 0;
 }
 
-#CriarUserBody #UserUl {
+#UpdateCardBody #UpdateCardUl {
     background: var(--surface);
     border: 1px solid var(--border);
     border-top: none;
@@ -37,7 +37,7 @@
 }
 
 /* ── Form rows ────────────────────────────────────────── */
-#CriarUserBody #UserUl #UserForm {
+#UpdateCardBody #UpdateCardUl #UserForm {
     display: flex;
     flex-direction: row;
     gap: 0;
@@ -47,7 +47,7 @@
     justify-content: stretch;
 }
 
-#CriarUserBody #UserUl #UserForm #divH1 {
+#UpdateCardBody #UpdateCardUl #UserForm #divH1 {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
@@ -57,7 +57,7 @@
     gap: 0;
 }
 
-#CriarUserBody #UserUl #UserForm #divH1 h1 {
+#UpdateCardBody #UpdateCardUl #UserForm #divH1 h1 {
     font-size: 13px;
     font-weight: 500;
     color: var(--text-muted);
@@ -72,22 +72,22 @@
     width: 100%;
 }
 
-#CriarUserBody #UserUl #UserForm #divH1 h1.thumb-label {
+#UpdateCardBody #UpdateCardUl #UserForm #divH1 h1.thumb-label {
     height: auto;
     min-height: 36px;
     line-height: 36px;
 }
 
-#CriarUserBody #UserUl #UserForm #divInput {
+#UpdateCardBody #UpdateCardUl #UserForm #divInput {
     display: flex;
     flex-direction: column;
     flex: 1;
     min-width: 0;
 }
 
-#CriarUserBody #UserUl #UserForm #divInput #input,
-#CriarUserBody #UserUl #UserForm #divInput input[type="text"],
-#CriarUserBody #UserUl #UserForm #divInput select {
+#UpdateCardBody #UpdateCardUl #UserForm #divInput #input,
+#UpdateCardBody #UpdateCardUl #UserForm #divInput input[type="text"],
+#UpdateCardBody #UpdateCardUl #UserForm #divInput select {
     font-size: 14px;
     margin-bottom: 14px;
     padding: 7px 10px;
@@ -100,7 +100,7 @@
     box-sizing: border-box;
 }
 
-#CriarUserBody #UserUl #UserForm #divInput select option {
+#UpdateCardBody #UpdateCardUl #UserForm #divInput select option {
     background: var(--surface);
 }
 
@@ -132,8 +132,8 @@
     margin: 0 0 6px;
 }
 
-#CriarUserBody #UserUl button[type="submit"],
-#CriarUserBody #UserUl > button:not([type]) {
+#UpdateCardBody #UpdateCardUl button[type="submit"],
+#UpdateCardBody #UpdateCardUl > button:not([type]) {
     margin: 12px auto 0;
     border-radius: var(--radius-sm);
     width: 140px;
@@ -146,5 +146,121 @@
     border: none;
     transition: background 0.15s;
 }
-#CriarUserBody #UserUl button[type="submit"]:hover,
-#CriarUserBody #UserUl > button:not([type]):hover { background: var(--primary-hover); }
+#UpdateCardBody #UpdateCardUl button[type="submit"]:hover,
+#UpdateCardBody #UpdateCardUl > button:not([type]):hover { background: var(--primary-hover); }
+
+/* ── IA sections ─────────────────────────────────────── */
+#ia-section {
+    width: 100%;
+    padding: 14px 16px;
+    background: rgba(57, 73, 171, 0.1);
+    border-radius: var(--radius-sm);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+#ia-section h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: #a5b4fc;
+}
+
+#btn-ia {
+    background: #3949ab;
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 13px;
+    margin: 0 0 10px;
+    width: auto;
+    height: auto;
+    transition: background 0.15s;
+}
+#btn-ia:hover { background: #4a5bc4; }
+#btn-ia:disabled { background: #4a5070; cursor: not-allowed; }
+
+#ia-resumo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+#ia-resumo label {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+#textarea-resumo {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
+    font-size: 13px;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+#btn-descartar {
+    background: rgba(174, 70, 70, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(174, 70, 70, 0.3);
+    width: auto;
+    height: auto;
+    margin: 0;
+    padding: 4px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+}
+
+#ia-tags { display: flex; flex-direction: column; gap: 8px; }
+
+#categoria-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#categoria-box label { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
+
+#input-categoria {
+    padding: 5px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-strong);
+    background: var(--surface-hover);
+    color: var(--text);
+    font-size: 13px;
+    width: 220px;
+}
+#input-categoria option { background: var(--surface); }
+
+#tags-chips label { font-size: 12px; color: var(--text-muted); }
+
+#chips-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.tag-chip {
+    background: rgba(99, 102, 241, 0.15);
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    border-radius: 16px;
+    padding: 3px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #a5b4fc;
+    user-select: none;
+    transition: background 0.15s;
+}
+.tag-chip:hover {
+    background: rgba(174, 70, 70, 0.15);
+    border-color: rgba(174, 70, 70, 0.3);
+    color: #fca5a5;
+}
