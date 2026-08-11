@@ -147,14 +147,11 @@ const FolderBody: React.FC = () => {
                         <div id='FolderForm'>
                             <div id='divH1'>
                                 <li>
-                                    <h1>Id do Folder: {codigo}</h1>
                                     <h1>Nome: {nome}</h1>
                                     <h1>Descrição: {descricao2}</h1>
                                     <h1>Data: {data}</h1>
-                                    <h1>Id da Branch: {branchId}</h1>
-                                    <h1>Nome da Branch: {branchNome}</h1>
-                                    <h1>Id do User: {userId}</h1>
-                                    <h1>Nome do User: {userNome}</h1>
+                                    <h1>Branch: {branchNome}</h1>
+                                    <h1>Responsável: {userNome}</h1>
                                 </li>
                             </div>
                         </div>

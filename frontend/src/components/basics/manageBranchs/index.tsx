@@ -134,7 +134,6 @@ const BranchBody: React.FC = () => {
                         <div id='BranchForm'>
                             <div id='divH1'>
                                 <li>
-                                    <h1>Id do Branch: {codigo}</h1>
                                     <h1>Nome: {nome}</h1>
                                     <h1>Descrição: {descricao2}</h1>
                                     <h1>Data de criação: {data}</h1>
