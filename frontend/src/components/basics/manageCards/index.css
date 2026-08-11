@@ -237,6 +237,15 @@
     overflow-x: hidden;
     word-break: break-word;
     overflow-wrap: anywhere;
+    color: var(--text);
+}
+#CardBody #CardUl #CardForm #divH1 #descricao-html p,
+#CardBody #CardUl #CardForm #divH1 #descricao-html ul,
+#CardBody #CardUl #CardForm #divH1 #descricao-html ol,
+#CardBody #CardUl #CardForm #divH1 #descricao-html li,
+#CardBody #CardUl #CardForm #divH1 #descricao-html h2,
+#CardBody #CardUl #CardForm #divH1 #descricao-html h3 {
+    color: var(--text);
 }
 #CardBody #CardUl #CardForm #divH1 #descricao-html * {
     max-width: 100%;

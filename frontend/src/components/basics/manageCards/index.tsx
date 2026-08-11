@@ -134,7 +134,7 @@ const CardBody: React.FC = () => {
         const d = response.data;
         setCodigo(d.codigo_card);
         setNome(d.nome_card);
-        setDescricao2(d.descricao_card);
+        setDescricao2(d.descricao_card ?? '');
         setThumbnailLink(d.thumbnail_card);
         setData(d.data_card);
         setResumo(d.resumo_card ?? '');
@@ -236,7 +236,6 @@ const CardBody: React.FC = () => {
                         <div id='CardForm'>
                             <div id='divH1'>
                                 <li>
-                                    <h1>Id do Card: {codigo}</h1>
                                     <h1>Nome: {nome}</h1>
                                     {resumo && <h1>Resumo: {resumo}</h1>}
                                     {categoriaCard && <h1>Categoria: {categoriaCard}</h1>}
@@ -264,12 +263,9 @@ const CardBody: React.FC = () => {
                                         <div id='descricao-html' dangerouslySetInnerHTML={{ __html: descricao2 }} />
                                     )}
                                     <h1>Data: {data}</h1>
-                                    <h1>Folder Id: {folderId}</h1>
-                                    <h1>Folder Nome: {folderNome}</h1>
-                                    <h1>Branch Id: {branchId}</h1>
-                                    <h1>Branch Nome: {branchNome}</h1>
-                                    <h1>User Id: {userId}</h1>
-                                    <h1>User Nome: {userNome}</h1>
+                                    <h1>Sistema: {folderNome}</h1>
+                                    <h1>Time: {branchNome}</h1>
+                                    <h1>Autor: {userNome}</h1>
                                 </li>
                             </div>
                         </div>
