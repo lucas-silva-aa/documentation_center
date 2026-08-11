@@ -14,8 +14,7 @@ interface iuser {
     codigo_user: number,
     nome_user: string,
     descricao_user: string,
-    senha_user: string,
-    admin_user: string,
+    nivel_acesso: number,
     data_user: string,
     _links_user: i_links
 }
@@ -28,10 +27,8 @@ const UserBody: React.FC = () => {
     const [direction] = useState('desc');
     const [ordenation] = useState('codigo');
     const [page, setPage] = useState(0);
-    const [codigo, setCodigo] = useState('');
     const [nome, setNome] = useState('');
-    const [senha, setSenha] = useState('');
-    const [admin, setAdmin] = useState('');
+    const [nivelAcesso, setNivelAcesso] = useState<number | null>(null);
     const [date, setDate] = useState('');
     const [descricao2, setDescricao2] = useState('');
     const [isOpen, setIsOpen] = useState(false);
@@ -54,13 +51,17 @@ const UserBody: React.FC = () => {
         window.location.reload();
     };
 
+    const nivelLabel = (nivel: number) => {
+        if (nivel === 3) return 'Admin';
+        if (nivel === 2) return 'Gestor';
+        return 'Colaborador';
+    };
+
     const ExibirMsg = async (id: string) => {
         const response = await api.get('/v1/ts/users/' + id);
-        setCodigo(response.data.codigo_user);
         setNome(response.data.nome_user);
         setDescricao2(response.data.descricao_user);
-        setSenha(response.data.senha_user);
-        setAdmin(response.data.admin_user);
+        setNivelAcesso(response.data.nivel_acesso);
         setDate(response.data.data_user);
     };
 
@@ -113,11 +114,9 @@ const UserBody: React.FC = () => {
                         <div id='UserForm'>
                             <div id='divH1'>
                                 <li>
-                                    <h1>Id do User: {codigo}</h1>
                                     <h1>Nome: {nome}</h1>
                                     <h1>Descrição: {descricao2}</h1>
-                                    <h1>Senha: {senha}</h1>
-                                    <h1>Admin: {admin}</h1>
+                                    <h1>Nível de acesso: {nivelAcesso !== null ? nivelLabel(nivelAcesso) : ''}</h1>
                                     <h1>Data: {date}</h1>
                                 </li>
                             </div>
