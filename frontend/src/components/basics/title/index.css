@@ -1,3 +1,3 @@
 .page-title {
-    margin-top: calc(5vh + 108px);
+    margin-top: var(--header-height, 180px);
 }

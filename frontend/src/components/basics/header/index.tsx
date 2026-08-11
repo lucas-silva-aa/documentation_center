@@ -8,6 +8,17 @@ import api from 'services/api'
 
 const Header = () => {
     const history = useHistory();
+
+    useEffect(() => {
+        const headerEl = document.querySelector('header') as HTMLElement | null;
+        if (!headerEl) return;
+        const setHeight = () =>
+            document.documentElement.style.setProperty('--header-height', (headerEl.offsetHeight + 8) + 'px');
+        setHeight();
+        const ro = new ResizeObserver(setHeight);
+        ro.observe(headerEl);
+        return () => ro.disconnect();
+    }, []);
   const [post, setPost] = useState(false);
   const [descricao, setDescricao] = useState("");
   const [logado, setLogado] = useState("");

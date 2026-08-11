@@ -6,6 +6,7 @@ header {
     right: 0;
     z-index: 100;
     padding: 0;
+    background: white;
 }
 
 #header-title-bar {
