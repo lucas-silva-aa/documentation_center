@@ -2,18 +2,18 @@ import Footer from '../../components/basics/footer';
 import Header from '../../components/basics/header';
 import Title from  '../../components/basics/title';
 // @ts-ignore
-import CardBody from 'components/basics/manageCards';
+import ManageScorePage from 'components/basics/manageFolders';
 
-const Card: React.FC = () => {
+const ScorePage: React.FC = () => {
     return (
 
         <>
             <Title />
             <Header />
-            <CardBody />
+            <ManageScorePage />
             <Footer />
         </>
     );
 }
 
-export default Card;
+export default ScorePage;

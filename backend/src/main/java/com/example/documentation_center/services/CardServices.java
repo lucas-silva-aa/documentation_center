@@ -2,11 +2,11 @@ package com.example.documentation_center.services;
 
 import com.example.documentation_center.converter.DozerConverter;
 import com.example.documentation_center.dtos.CardDTO;
+import com.example.documentation_center.dtos.ScoreDTO;
+import com.example.documentation_center.dtos.UserDTO;
 import com.example.documentation_center.exception.ResourceNotFoundException;
-import com.example.documentation_center.models.Card;
-import com.example.documentation_center.models.User;
-import com.example.documentation_center.repositories.CardDAO;
-import com.example.documentation_center.repositories.UserDAO;
+import com.example.documentation_center.models.*;
+import com.example.documentation_center.repositories.*;
 import com.example.documentation_center.services.exceptions.BusinessException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +17,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+
+import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class CardServices {
@@ -51,6 +54,7 @@ public class CardServices {
             throw new BusinessException("Os campos com * são obrigatórios!");
         }
         var entity = DozerConverter.parseObject(cardDTO, Card.class);
+
         if (cardDTO.getFolderDTO() != null && cardDTO.getFolderDTO().getKey() != null) {
             entity.setIdFolder(cardDTO.getFolderDTO().getKey());
         }
@@ -59,18 +63,38 @@ public class CardServices {
         if (entity.getDataHora() == null) entity.setDataHora(LocalDate.now());
         Card saved = cardDAO.save(entity);
         notificacaoServices.notificarAssinantes(saved);
-        return new CardDTO(saved);
+        return DozerConverter.parseObject(saved, CardDTO.class);
+    }
+
+    public Page<CardDTO> findCardByName(String name, Pageable pageable) {
+        var page = cardDAO.findCardByNome(name, pageable);
+        return page.map(this::convertToCardDTO);
+    }
+
+    public CardDTO findCardByName(String name) {
+        var entity = cardDAO.findCardByNome(name);
+        if (entity != null) {
+            return DozerConverter.parseObject(entity, CardDTO.class);
+        } else {
+            throw new ResourceNotFoundException("Card " + name + " not found!");
+        }
     }
 
     public Page<CardDTO> findAll(Pageable pageable) {
-        return cardDAO.findAll(pageable).map(CardDTO::new);
+        var page = cardDAO.findAll(pageable);
+        return page.map(this::convertToCardDTO);
+    }
+
+    private CardDTO convertToCardDTO(Card entity) {
+        return DozerConverter.parseObject(entity, CardDTO.class);
     }
 
     public CardDTO findById(Long id) {
         var entity = cardDAO.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
-        return new CardDTO(entity);
+        return DozerConverter.parseObject(entity, CardDTO.class);
     }
+
 
     @Transactional
     public CardDTO update(Long id, CardDTO card, Long requesterId) {
@@ -86,7 +110,7 @@ public class CardServices {
         if (card.getFolderDTO() != null && card.getFolderDTO().getKey() != null) {
             entity.setIdFolder(card.getFolderDTO().getKey());
         }
-        return new CardDTO(cardDAO.save(entity));
+        return DozerConverter.parseObject(cardDAO.save(entity), CardDTO.class);
     }
 
     @Transactional(readOnly = true)
@@ -121,4 +145,19 @@ public class CardServices {
         verificarPermissaoCard(entity, requesterId);
         cardDAO.delete(entity);
     }
+
+
+       /*
+        //<editor-fold defaultstate="collapsed" desc="delombok">
+        @SuppressWarnings("all")
+        public CardServices(CardDAO cardDAO, FolderDAO folderDAO, BranchDAO branchDAO, UserDAO userDAO,
+                            IaService iaService, NotificacaoServices notificacaoServices) {
+            this.cardDAO = cardDAO;
+            this.folderDAO = folderDAO;
+            this.branchDAO = branchDAO;
+            this.userDAO = userDAO;
+            this.iaService = iaService;
+            this.notificacaoServices = notificacaoServices;
+        }
+    */
 }

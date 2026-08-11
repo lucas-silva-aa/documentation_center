@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../../../services/api";
 import React from 'react'
 import Alert from 'react-popup-alert'
+// @ts-ignore
 import '../manageFolders/index.css'
 import { useHistory } from 'react-router-dom';
 import { FiArrowDown, FiArrowUp, FiEdit, FiTrash } from "react-icons/fi";

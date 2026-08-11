@@ -1,4 +1,5 @@
-  import './index.css'
+ // @ts-ignore
+ import './index.css'
  const Footer = () => {
     return (
         <>

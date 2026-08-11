@@ -1,8 +1,10 @@
+// @ts-ignore
 import './index.css'
 import Alert from 'react-popup-alert'
 import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 import { useHistory } from 'react-router-dom';
+// @ts-ignore
 import api from 'services/api'
 
 
