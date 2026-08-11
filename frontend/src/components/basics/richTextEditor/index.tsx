@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -18,6 +18,7 @@ const uploadImage = async (file: File): Promise<string> => {
 };
 
 const RichTextEditor: React.FC<Props> = ({ content, onChange }) => {
+    const prevContentRef = useRef<string | null>(null);
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -78,9 +79,12 @@ const RichTextEditor: React.FC<Props> = ({ content, onChange }) => {
 
     useEffect(() => {
         if (!editor) return;
-        if (content !== editor.getHTML()) {
+        // Só chama setContent quando o conteúdo mudou externamente (ex: carga via API)
+        // Evita resetar o editor em re-renders causados por outros estados (ex: upload de thumbnail)
+        if (content !== prevContentRef.current && content !== editor.getHTML()) {
             editor.commands.setContent(content, false);
         }
+        prevContentRef.current = content;
     }, [content, editor]);
 
     if (!editor) return null;
