@@ -12,7 +12,7 @@ const HomeBody: React.FC = () => {
     const [inputNome, setInputNome] = useState('');
     const [inputSenha, setInputSenha] = useState('');
     const [inputDescricao, setInputDescricao] = useState('');
-    const [inputAdmin, setInputAdmin] = useState<boolean>(false);
+    const [inputNivelAcesso, setInputNivelAcesso] = useState<number>(1);
     const [post, setPost] = useState(false);
     const [descricao, setDescricao] = useState('');
     const location = useLocation<LocationState>();
@@ -24,7 +24,7 @@ const HomeBody: React.FC = () => {
         api.get('/v1/ts/users/' + id).then(res => {
             setInputNome(res.data.nome_user ?? '');
             setInputDescricao(res.data.descricao_user ?? '');
-            setInputAdmin(res.data.admin_user === true || res.data.admin_user === 'true');
+            setInputNivelAcesso(res.data.nivel_acesso ?? 1);
         }).catch(() => {});
     }, []);
 
@@ -39,7 +39,8 @@ const HomeBody: React.FC = () => {
             nome_user: inputNome,
             descricao_user: inputDescricao,
             senha_user: inputSenha || undefined,
-            admin_user: inputAdmin,
+            nivel_acesso: inputNivelAcesso,
+            admin_user: inputNivelAcesso === 3,
         }).then(r => r.data).catch(async error => {
             if (error.response) {
                 setDescricao(error.response.data?.descricao ?? 'Erro ao atualizar');
@@ -72,15 +73,16 @@ const HomeBody: React.FC = () => {
                             <h1>Nome*: </h1>
                             <h1>Senha: </h1>
                             <h1>Descrição: </h1>
-                            <h1>Admin*: </h1>
+                            <h1>Nível de acesso*: </h1>
                         </div>
                         <div id='divInput'>
                             <input type="text" value={inputNome} onChange={e => setInputNome(e.target.value)} required />
                             <input type="password" placeholder="Deixe em branco para manter" value={inputSenha} onChange={e => setInputSenha(e.target.value)} />
                             <input type="text" value={inputDescricao} onChange={e => setInputDescricao(e.target.value)} />
-                            <select value={inputAdmin ? 'true' : 'false'} onChange={e => setInputAdmin(e.target.value === 'true')}>
-                                <option value='false'>Não</option>
-                                <option value='true'>Sim</option>
+                            <select value={inputNivelAcesso} onChange={e => setInputNivelAcesso(Number(e.target.value))}>
+                                <option value={1}>Colaborador</option>
+                                <option value={2}>Gestor</option>
+                                <option value={3}>Admin</option>
                             </select>
                         </div>
                     </div>

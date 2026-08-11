@@ -31,6 +31,15 @@ public class CardServices {
     UserDAO userDAO;
 
     @Autowired
+    ScoreDAO scoreDAO;
+
+    @Autowired
+    FolderDAO folderDAO;
+
+    @Autowired
+    BranchDAO branchDAO;
+
+    @Autowired
     NotificacaoServices notificacaoServices;
 
     private User buscarRequisitante(Long requesterId) {
@@ -63,6 +72,7 @@ public class CardServices {
         if (entity.getDataHora() == null) entity.setDataHora(LocalDate.now());
         Card saved = cardDAO.save(entity);
         notificacaoServices.notificarAssinantes(saved);
+        atualizarScore(saved);
         return DozerConverter.parseObject(saved, CardDTO.class);
     }
 
@@ -137,6 +147,32 @@ public class CardServices {
             result = cardDAO.findAll(pageable);
         }
         return result.map(CardDTO::new);
+    }
+
+    private void atualizarScore(Card card) {
+        if (card.getIdUser() == null) return;
+        userDAO.findById(card.getIdUser()).ifPresent(user -> {
+            String nomeLogin = user.getNome();
+            String nomeTime = branchDAO.findById(user.getIdBranch())
+                    .map(b -> b.getNome()).orElse("Sem time");
+            String nomeSistema = card.getIdFolder() != null
+                    ? folderDAO.findById(card.getIdFolder()).map(f -> f.getNome()).orElse("Sem sistema")
+                    : "Sem sistema";
+
+            Score score = scoreDAO.findScoreByNome(nomeLogin);
+            if (score != null) {
+                score.setPontos(score.getPontos() + 1);
+                score.setDataHora(LocalDate.now());
+            } else {
+                score = new Score();
+                score.setNomeLogin(nomeLogin);
+                score.setPontos(1);
+                score.setTime(nomeTime);
+                score.setSistema(nomeSistema);
+                score.setDataHora(LocalDate.now());
+            }
+            scoreDAO.save(score);
+        });
     }
 
     public void delete(Long id, Long requesterId) {

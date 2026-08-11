@@ -28,7 +28,7 @@ public class Card implements Serializable {
     @Column(name = "data", nullable = false)
     private LocalDate dataHora;
 
-    @Column(name = "resumo", length = 500)
+    @Column(name = "resumo", length = 2000)
     private String resumo;
 
     @Column(name = "tags", length = 300)
