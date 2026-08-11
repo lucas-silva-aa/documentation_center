@@ -29,6 +29,7 @@ interface ifolder {
     nome_folder: string,
     descricao_folder: string,
     data_folder: string,
+    idBranch: number,
     branchDTO: ibranch,
     _links_folder: i_links
 }
@@ -53,7 +54,8 @@ const FolderBody: React.FC = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [alertState, setAlertState] = React.useState({ show: false, text: '' });
     const nivel = parseInt(localStorage.getItem('nivelAcesso') || '1');
-    const isGestor = nivel >= 2;
+    const isAdmin = nivel >= 3;
+    const myBranchId = parseInt(localStorage.getItem('idBranch') || '0');
     const myUserId = parseInt(localStorage.getItem('userId') || '0');
     const history = useHistory();
 
@@ -117,7 +119,7 @@ const FolderBody: React.FC = () => {
             />
             <div id='FolderBody'>
                 <div id='sidebar'>
-                    {isGestor && <button id='newObj' onClick={() => history.push('/newfolder')}>Criar novo</button>}
+                    {(isAdmin || myBranchId > 0) && <button id='newObj' onClick={() => history.push('/newfolder')}>Criar novo</button>}
                     <FiArrowUp className='carousel-icon' onClick={() => { if (page > 0) setPage(page - 1); }} />
                     {Msg.map(m => (
                         <div className='item-btn' key={m.codigo_folder}>
@@ -126,8 +128,8 @@ const FolderBody: React.FC = () => {
                                 <h4>{m.descricao_folder}</h4>
                             </div>
                             <div className='icons-buttons'>
-                                {isGestor && <FiEdit className='edit-btn' onClick={() => history.push('/updatefolder', { id: m.codigo_folder })} />}
-                                {isGestor && (
+                                {(isAdmin || m.idBranch === myBranchId) && <FiEdit className='edit-btn' onClick={() => history.push('/updatefolder', { id: m.codigo_folder })} />}
+                                {(isAdmin || m.idBranch === myBranchId) && (
                                     <Popup trigger={<FiTrash className='delete-btn' />} position="center center" open={isOpen}>
                                         <h4 id='popupText'>Tem certeza que deseja excluir?</h4>
                                         <button className='conf-delete' onClick={() => deleteMsg(m.codigo_folder.toString())}>Sim</button>
