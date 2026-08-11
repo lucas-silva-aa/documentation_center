@@ -1,6 +1,6 @@
 /* ── Layout ──────────────────────────────────────────── */
 #UpdateCardBody {
-    width: min(92vw, 720px);
+    width: min(92vw, 860px);
     min-height: 50vh;
     padding: 28px 0 40px;
     margin: 0 auto;

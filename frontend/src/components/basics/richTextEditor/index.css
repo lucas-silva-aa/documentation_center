@@ -44,7 +44,7 @@
 
 .rte-content {
     padding: 12px 14px;
-    min-height: 180px;
+    min-height: 360px;
     font-size: 14px;
     line-height: 1.6;
     outline: none;
@@ -52,7 +52,7 @@
 
 .rte-content .ProseMirror {
     outline: none;
-    min-height: 160px;
+    min-height: 340px;
 }
 
 .rte-content .ProseMirror p { margin: 0 0 8px; }

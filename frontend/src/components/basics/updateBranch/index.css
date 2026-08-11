@@ -109,16 +109,6 @@
     box-sizing: border-box;
 }
 
-/* Editor section (usado por updateCard) */
-#editor-section {
-    width: 30vw;
-    margin: 8px 0 4px 0;
-}
-
-#editor-section h3 {
-    font-size: 15px;
-    margin: 0 0 6px 0;
-}
 
 #CriarUserBody #UserUl button {
     margin: 8px 0 4px 0;
