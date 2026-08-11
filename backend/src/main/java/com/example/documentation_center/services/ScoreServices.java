@@ -6,12 +6,14 @@ import com.example.documentation_center.dtos.ScoreDTO;
 import com.example.documentation_center.exception.ResourceNotFoundException;
 import com.example.documentation_center.models.*;
 import com.example.documentation_center.repositories.ScoreDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ScoreServices {
+    @Autowired
     private ScoreDAO scoreDAO;
     //private BranchDAO branchDAO;
     //private UserDAO userDAO;

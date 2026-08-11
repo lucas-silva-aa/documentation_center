@@ -22,7 +22,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Tag(name = "ScoreEndpoint")
 @RestController
-@RequestMapping("/api/score/v1")
+@RequestMapping("/v1/ts/scores")
 public class ScoreController {
 
     @Autowired
@@ -32,27 +32,15 @@ public class ScoreController {
     //private PagedResourcesAssembler<ScoreDTO> assembler;
 
     @Operation(summary = "Find all score" )
-    @GetMapping(produces = { "application/json", "application/xml", "application/x-yaml" })
-    public ResponseEntity<CollectionModel<ScoreDTO>>findAll(
+    @GetMapping(produces = { "application/json" })
+    public ResponseEntity<?> findAll(
             @RequestParam(value="page", defaultValue = "0") int page,
-            @RequestParam(value="limit", defaultValue = "12") int limit,
-            @RequestParam(value="direction", defaultValue = "asc") String direction) {
+            @RequestParam(value="limit", defaultValue = "50") int limit,
+            @RequestParam(value="direction", defaultValue = "desc") String direction) {
 
         var sortDirection = "desc".equalsIgnoreCase(direction) ? Sort.Direction.DESC : Sort.Direction.ASC;
-
-        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "id"));
-
-        Page<ScoreDTO> score =  service.findAll(pageable);
-        score
-                .stream()
-                .forEach(p -> p.add(
-                                linkTo(methodOn(ScoreController.class).findById(p.getKey())).withSelfRel()
-                        )
-                );
-
-        //PagedResources<?> resources = assembler.toResource(score);
-
-        return ResponseEntity.ok(CollectionModel.of(score));
+        Pageable pageable = PageRequest.of(page, limit, Sort.by(sortDirection, "pontos"));
+        return ResponseEntity.ok(service.findAll(pageable).getContent());
     }
 
 

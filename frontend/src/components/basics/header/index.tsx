@@ -173,6 +173,7 @@ const permissionCard = async () => {
         {naoLidas > 0 && <span id='notif-badge'>{naoLidas > 99 ? '99+' : naoLidas}</span>}
     </button>
     <button onClick={() => history.push('/assinaturas')}>📌 Assinaturas</button>
+    <button onClick={() => history.push('/managescore')}>🏆 Score</button>
     <div id='logado'>
       <span id='logado-label'>Logado como</span>
       <span id='logado-nome'>{logado}</span>

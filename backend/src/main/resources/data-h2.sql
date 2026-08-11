@@ -120,4 +120,13 @@ INSERT INTO Notificacoes (codigo, user_obj_id, card_obj_id, mensagem, lida, data
 (5, 4, 7, 'Nova doc em Infraestrutura: Pipeline CI/CD com Jenkins',            FALSE, '2026-04-10'),
 (6, 1, 1, 'Nova documentacao no Time Backend: Deploy do PROJUD com Docker',   TRUE,  '2026-02-01');
 
+-- ----------------------------
+-- Scores
+-- ----------------------------
+INSERT INTO Scores (id, nomeLogin, pontos, time, sistema, data) VALUES
+(1, 'Lucas Lacerda', 12, 'Time Backend',        'PROJUD',         '2026-04-10'),
+(2, 'Joao Marcelo',  9,  'Time Frontend',       'Portal TJGO',    '2026-04-10'),
+(3, 'Ana Beatriz',   6,  'Time Infraestrutura', 'Infraestrutura', '2026-04-10'),
+(4, 'Admin TJGO',    3,  'Time Backend',        'SEI',            '2026-04-10');
+
 SET REFERENTIAL_INTEGRITY TRUE;

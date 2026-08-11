@@ -1,152 +1,66 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import api from "../../../services/api";
-import React from 'react'
-import Alert from 'react-popup-alert'
-// @ts-ignore
-import '../manageScorePage/index.css'
-import { FiArrowDown, FiArrowUp, FiEdit, FiTrash, FiSearch } from "react-icons/fi";
-import { useHistory } from "react-router-dom";
-import Popup from "reactjs-popup";
+import React from 'react';
+import './index.css';
 
-interface iScore{
+interface iScore {
+    id: number,
     nomeLogin: string,
     pontos: number,
     time: string,
     sistema: string,
     dataHora: string,
-    _links_card: i_links
 }
-interface i_links {
-    self: iself
-}
-interface iself {
-    href: string
-}
-
-const CATEGORIAS = ['', 'API', 'Banco de Dados', 'DevOps', 'Frontend', 'Infraestrutura', 'Segurança'];
 
 const ScoreBody: React.FC = () => {
-    const [Msg, setMsg] = useState<iScore[]>([]);
-    const [totalScores, setTotalScores] = useState(0);
-    const [direction] = useState('desc');
-    const [ordenation] = useState('codigo');
-    const [page, setPage] = useState(0);
-    const [busca, setBusca] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [codigo, setCodigo] = useState('');
-    const [nomeLogin, setNomeLogin] = useState('');
-    const [time, setTime] = useState('');
-    const [sistema, setSistema] = useState('');
-    const [dataHora, setDataHora] = useState('');
-    const [pontos, setPontos] = useState(0);
-    const alertMsg = useRef('');
-    const [alertState, setAlertState] = useState({ show: false, text: '' });
-    const isAdmin = localStorage.getItem('admin') === 'true';
-    const history = useHistory();
-
-    const PAGE_SIZE = 4;
+    const [scores, setScores] = useState<iScore[]>([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadMsg = async () => {
-            const params: any = { page, limit: PAGE_SIZE, direction, ordenation };
-            if (busca) params.nome = busca;
-            if (categoria) params.categoria = categoria;
-            const endpoint = (busca || categoria) ? '/v1/ts/scores/pesquisa' : '/v1/ts/scores';
-            try {
-                const response = await api.get(endpoint, { params });
-                const embedded = response.data?._embedded?.scoreDTOList;
-                setMsg(embedded ?? []);
-                setTotalScores(response.data?.page?.totalElements ?? (embedded?.length ?? 0));
-            } catch {
-                setMsg([]);
-                setTotalScores(0);
-            }
-        };
-        loadMsg();
-    }, [page, busca, categoria]);
+        api.get('/v1/ts/scores', { params: { limit: 50, direction: 'desc' } })
+            .then(res => {
+                const data = Array.isArray(res.data) ? res.data : (res.data?._embedded?.scoreDTOList ?? []);
+                setScores(data);
+            })
+            .catch(() => setScores([]))
+            .finally(() => setLoading(false));
+    }, []);
 
-    // reseta página ao mudar filtro
-    useEffect(() => { setPage(0); }, [busca, categoria]);
-
-    const showAlert = (msg: string) => {
-        alertMsg.current = msg;
-        setAlertState({ show: true, text: msg });
+    const medalha = (i: number) => {
+        if (i === 0) return 'ouro';
+        if (i === 1) return 'prata';
+        if (i === 2) return 'bronze';
+        return '';
     };
 
-    const ExibirMsg = async (id: string) => {
-        const response = await api.get('/v1/ts/scores/' + id);
-        const d = response.data;
-        setNomeLogin(d.nomeLogin);
-        setPontos(d.pontos);
-        setDataHora(d.dataHora);
-        setSistema(d.sistema);
-        setTime(d.time);
+    const emoji = (i: number) => {
+        if (i === 0) return '🥇';
+        if (i === 1) return '🥈';
+        if (i === 2) return '🥉';
+        return `#${i + 1}`;
     };
 
     return (
-        <>
-            <Alert
-                header={''}
-                btnText={'Fechar'}
-                text={alertState.text}
-                type={'error'}
-                show={alertState.show}
-                onClosePress={() => setAlertState({ show: false, text: '' })}
-                pressCloseOnOutsideClick={true}
-                showBorderBottom={true}
-                alertStyles={{
-                    "background-color": "#f8f9fa", "width": "300px", "height": "100px",
-                    "display": "flex", "flex-direction": "column", "align-items": "center",
-                    "justify-content": "center", "left": "42%", "bottom": "30%",
-                    "border-radius": "8px", "border": "2px solid #C4C4C4", "position": "absolute"
-                }}
-                headerStyles={{}} textStyles={{}}
-                buttonStyles={{
-                    "background-color": "#efefef", "border-radius": "8px", "margin-bottom": "10px",
-                    "width": "70px", "border": "2px solid #C4C4C4", "height": "30px",
-                    "color": "#000", "padding-left": "10px"
-                }}
-            />
-            <body id='ScoreBody'>
-                <div>
-                    <h1 id='TitleBar'>Análise de colaboradores:</h1>
-                    <ul id='ScoreUl'>
-                        <div id='ScoreForm'>
-                            <h2 id='TitleBar'>Score dos colaboradores:</h2>
-                            {Msg.map(m => (
-                                <>  
-                                <div id='divH1'>
-                                    <h3>Nome:</h3>
-                                    <h3> Pontuação:</h3>
-                                </div>
-                                <div id='divH2'>
-                                    <h3>{m.nomeLogin}:</h3>
-                                    <h3>{m.pontos}</h3>
-                                </div>
-                                <h2 id='TitleBar'>Score dos times:</h2>
-                                <div id='divH1'>
-                                    <h3>Nome:</h3>
-                                    <h3> Pontuação:</h3>
-                                </div>
-                                <div id='divH2'>
-                                    <h3>{m.time}:</h3>
-                                    <h3>{m.pontos}</h3>
-                                </div>
-                                <h2 id='TitleBar'>Score dos sistemas:</h2>
-                                <div id='divH1'>
-                                    <h3>Nome:</h3>
-                                    <h3> Pontuação:</h3>
-                                </div><div id='divH2'>
-                                    <h3>{m.sistema}:</h3>
-                                    <h3>{m.pontos}</h3>
-                                </div>
-                                </>
-                            ))}
+        <div id='ScoreBody'>
+            <h2 id='TitleBar'>🏆 Ranking de Colaboradores</h2>
+            <ul id='ScoreUl'>
+                {loading && <p id='score-vazio'>Carregando...</p>}
+                {!loading && scores.length === 0 && (
+                    <p id='score-vazio'>Nenhum score registrado ainda.</p>
+                )}
+                {scores.map((s, i) => (
+                    <div key={s.id} className='score-row'>
+                        <span className={`score-posicao ${medalha(i)}`}>{emoji(i)}</span>
+                        <div className='score-info'>
+                            <span className='score-nome'>{s.nomeLogin}</span>
+                            <span className='score-meta'>{s.time} · {s.sistema}</span>
                         </div>
-                    </ul>                    
-                </div>
-            </body>
-        </>
+                        <span className='score-pontos'>{s.pontos} pts</span>
+                    </div>
+                ))}
+            </ul>
+        </div>
     );
-}
+};
+
 export default ScoreBody;
