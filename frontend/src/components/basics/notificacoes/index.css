@@ -64,31 +64,32 @@
 }
 
 .notif-item.nao-lida {
-    border-color: rgba(174, 70, 70, 0.35);
-    background: rgba(174, 70, 70, 0.05);
+    border-color: var(--primary);
+    background: var(--surface-hover);
 }
 
 .notif-item.lida {
-    opacity: 0.6;
+    opacity: 0.5;
 }
 
 #notif-conteudo {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
     flex: 1;
     min-width: 0;
 }
 
 #notif-mensagem {
     font-size: 14px;
+    font-weight: 500;
     color: var(--text);
     word-break: break-word;
 }
 
 #notif-data {
-    font-size: 11px;
-    color: var(--text-subtle);
+    font-size: 12px;
+    color: var(--text-muted);
 }
 
 .btn-lida {
