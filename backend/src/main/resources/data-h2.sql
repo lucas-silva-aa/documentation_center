@@ -15,11 +15,11 @@ INSERT INTO Branchs (id, nome, descricao, data) VALUES
 -- ----------------------------
 -- Usuários
 -- ----------------------------
-INSERT INTO Users (id, nome, descricao, senha, account_non_expired, account_non_locked, credentials_non_expired, enabled, admin, data, id_branch) VALUES
-(1, 'Admin TJGO',    'Administrador da plataforma DTI',           'admin123', TRUE, TRUE, TRUE, TRUE, TRUE,  '2026-01-10', 1),
-(2, 'Lucas Lacerda', 'Desenvolvedor Backend - Especializacao',    'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, '2026-01-11', 1),
-(3, 'Joao Marcelo',  'Desenvolvedor Frontend - Especializacao',  'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, '2026-01-12', 2),
-(4, 'Ana Beatriz',   'Analista de Sistemas DTI',                  'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, '2026-01-13', 3);
+INSERT INTO Users (id, nome, descricao, senha, account_non_expired, account_non_locked, credentials_non_expired, enabled, admin, nivel_acesso, data, id_branch) VALUES
+(1, 'Admin TJGO',    'Administrador da plataforma DTI',           'admin123', TRUE, TRUE, TRUE, TRUE, TRUE,  3, '2026-01-10', 1),
+(2, 'Lucas Lacerda', 'Desenvolvedor Backend - Especializacao',    'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, 2, '2026-01-11', 1),
+(3, 'Joao Marcelo',  'Desenvolvedor Frontend - Especializacao',  'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, 2, '2026-01-12', 2),
+(4, 'Ana Beatriz',   'Analista de Sistemas DTI',                  'senha123', TRUE, TRUE, TRUE, TRUE, FALSE, 1, '2026-01-13', 3);
 
 -- ----------------------------
 -- Sistemas (Folders)
